@@ -1,34 +1,63 @@
-import Complaint from "./models/Complaint.js";
+import Complaint from "../models/complaint.js";
 
 // Create complaint
 export const createComplaint = async (req, res) => {
-  const { studentName, category, description } = req.body;
+  try {
+    const { studentName, studentId, category, location, description } = req.body;
 
-  const complaint = await Complaint.create({
-    studentName,
-    category,
-    description
-  });
+    const complaint = await Complaint.create({
+      studentName,
+      studentId,
+      category,
+      location,
+      description
+    });
 
-  res.json(complaint);
+    res.json(complaint);
+
+  } catch (error) {
+    res.status(500).json({ message: "Error creating complaint" });
+  }
 };
 
-// Get all complaints
+
+// Get all complaints (admin)
 export const getComplaints = async (req, res) => {
-  const complaints = await Complaint.find();
-  res.json(complaints);
+  try {
+    const complaints = await Complaint.find();
+    res.json(complaints);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
 
-// Update complaint status
+
+// Get complaints for a specific student
+export const getComplaintsByStudent = async (req, res) => {
+  try {
+    const complaints = await Complaint.find({ studentId: req.params.studentId });
+    res.json(complaints);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
+// Update complaint status (admin)
 export const updateStatus = async (req, res) => {
-  const { id } = req.params;
-  const { status } = req.body;
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
 
-  const updated = await Complaint.findByIdAndUpdate(
-    id,
-    { status },
-    { new: true }
-  );
+    const updated = await Complaint.findByIdAndUpdate(
+      id,
+      { status },
+      { new: true }
+    );
 
-  res.json(updated);
+    res.json(updated);
+
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
