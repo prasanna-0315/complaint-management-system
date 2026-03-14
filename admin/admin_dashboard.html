@@ -16,7 +16,6 @@
     <nav>
   <a href="admin_dashboard.html" class="active">Dashboard</a>
   <a href="complaints.html">Complaints</a>
-  <a href="status.html">Status</a>
   <a href="admin_login.html">Logout</a>
 </nav>
 
@@ -35,25 +34,52 @@
     <section class="stats-grid">
 
       <div class="stat-card">
-        <h3>Total Complaints</h3>
-        <p id="total">0</p>
-      </div>
+  <h3>Total Complaints</h3>
+  <h1 id="totalComplaints">0</h1>
+</div>
 
-      <div class="stat-card pending">
-        <h3>Pending</h3>
-        <p id="pending">0</p>
-      </div>
-
-      <div class="stat-card resolved">
-        <h3>Resolved</h3>
-        <p id="resolved">0</p>
-      </div>
+<div class="stat-card pending">
+  <h3>Pending</h3>
+  <h1 id="pendingComplaints">0</h1>
+</div>
+<div class="stat-card progress">
+  <h3>In Progress</h3>
+  <h1 id="progressComplaints">0</h1>
+</div>
+<div class="stat-card resolved">
+  <h3>Resolved</h3>
+  <h1 id="resolvedComplaints">0</h1>
+</div>
 
     </section>
 
   </main>
 
 </div>
+<script>
 
+async function loadDashboardStats(){
+
+  const res = await fetch("http://localhost:5000/complaint");
+  const complaints = await res.json();
+
+  const total = complaints.length;
+
+  const pending = complaints.filter(c => c.status === "Pending").length;
+
+  const progress = complaints.filter(c => c.status === "In Progress").length;
+
+  const resolved = complaints.filter(c => c.status === "Resolved").length;
+
+  document.getElementById("totalComplaints").textContent = total;
+  document.getElementById("pendingComplaints").textContent = pending;
+  document.getElementById("progressComplaints").textContent = progress;
+  document.getElementById("resolvedComplaints").textContent = resolved;
+
+}
+
+loadDashboardStats();
+
+</script>
 </body>
 </html>

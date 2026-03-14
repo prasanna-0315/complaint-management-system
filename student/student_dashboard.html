@@ -246,9 +246,14 @@
   }
 
   // Load my complaints
-  function loadMyComplaints() {
-    const complaints = JSON.parse(localStorage.getItem("myComplaints") || "[]");
-    const container = document.getElementById("myComplaintsList");
+ async function loadMyComplaints() {
+  const studentId = sessionStorage.getItem("currentStudentId");
+
+  const container = document.getElementById("myComplaintsList");
+
+  try {
+    const response = await fetch("http://localhost:5000/complaint/student/" + studentId);
+    const complaints = await response.json();
 
     if (complaints.length === 0) {
       container.innerHTML = '<div class="empty-state">No complaints found. Submit your first complaint!</div>';
@@ -267,7 +272,12 @@
         </div>
       </div>
     `).join('');
+
+  } catch (error) {
+    console.error("Error loading complaints:", error);
+    container.innerHTML = '<div class="empty-state">Error loading complaints.</div>';
   }
+}
 </script>
 
 </body>

@@ -297,11 +297,12 @@ body {
 }
 
 .auth-card {
-  width: 380px;
+  width: 100%;
   background: white;
-  padding: 35px 30px 40px;
-  border-radius: 18px;
-  box-shadow: 0 25px 60px rgba(0,0,0,0.15);
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  max-width: 400px
 }
 
 /* Tabs */
@@ -479,7 +480,76 @@ body {
 /* ============================= */
 /* COMPLAINTS PAGE (BOLT STYLE) */
 /* ============================= */
+/* complaints container */
 
+#complaintsContainer{
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* complaint card */
+
+.complaint-card{
+  background: white;
+  border-radius: 12px;
+  padding: 18px 22px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* left section */
+
+.complaint-left{
+  max-width: 70%;
+}
+
+.complaint-title{
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.complaint-desc{
+  color: #555;
+  margin-bottom: 8px;
+}
+
+/* status badge */
+
+.status{
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 14px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.pending{
+  background: #fff3cd;
+  color: #856404;
+}
+
+.in-progress{
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.resolved{
+  background: #dcfce7;
+  color: #166534;
+}
+
+/* dropdown */
+
+.complaint-right select{
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
 .complaints-wrapper {
   min-height: 100vh;
   padding: 40px 60px;

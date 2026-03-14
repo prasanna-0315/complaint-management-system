@@ -10,13 +10,6 @@
 <div class="auth-center-wrapper">
   <div class="auth-card">
 
-    <!-- Tabs -->
-    <div class="auth-tabs">
-      <button class="tab active" onclick="showLogin()">Login</button>
-      <button class="tab" onclick="showRegister()">Register</button>
-    </div>
-
-    <!-- LOGIN -->
     <div id="loginForm" class="form-box">
       <h2>Admin Login</h2>
 
@@ -25,72 +18,30 @@
 
       <button class="primary-btn" onclick="login()">Login</button>
       <p class="error-text" id="loginError"></p>
-    </div>
 
-    <!-- REGISTER -->
-    <div id="registerForm" class="form-box hidden">
-      <h2>Admin Registration</h2>
-
-      <input type="text" id="regUser" placeholder="Username">
-      <input type="password" id="regPass" placeholder="Password">
-
-      <button class="primary-btn" onclick="register()">Register</button>
-      <p class="success-text" id="registerMsg"></p>
     </div>
 
   </div>
 </div>
-
 <script>
-function showLogin() {
-  loginForm.classList.remove("hidden");
-  registerForm.classList.add("hidden");
-  document.querySelectorAll(".tab")[0].classList.add("active");
-  document.querySelectorAll(".tab")[1].classList.remove("active");
-}
-
-function showRegister() {
-  registerForm.classList.remove("hidden");
-  loginForm.classList.add("hidden");
-  document.querySelectorAll(".tab")[1].classList.add("active");
-  document.querySelectorAll(".tab")[0].classList.remove("active");
-}
-
-function register() {
-  const user = regUser.value.trim();
-  const pass = regPass.value.trim();
-
-  if (!user || !pass) {
-    registerMsg.textContent = "All fields are required";
-    return;
-  }
-
-  localStorage.setItem("adminUser", user);
-  localStorage.setItem("adminPass", pass);
-
-  registerMsg.textContent = "Registration successful. Please login.";
-  regUser.value = "";
-  regPass.value = "";
-}
 
 function login() {
-  const storedUser = localStorage.getItem("adminUser");
-  const storedPass = localStorage.getItem("adminPass");
 
-  const user = loginUser.value.trim();
-  const pass = loginPass.value.trim();
+  const user = document.getElementById("loginUser").value.trim();
+  const pass = document.getElementById("loginPass").value.trim();
 
-  if (!storedUser || !storedPass) {
-    loginError.textContent = "No user registered. Please register first.";
-    return;
-  }
+  const adminUser = "admin";
+  const adminPass = "admin123";
 
-  if (user === storedUser && pass === storedPass) {
+  if (user === adminUser && pass === adminPass) {
     window.location.href = "admin_dashboard.html";
   } else {
-    loginError.textContent = "Invalid username or password.";
+    document.getElementById("loginError").textContent =
+      "Invalid username or password.";
   }
+
 }
+
 </script>
 
 </body>
