@@ -2,44 +2,152 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Complaints</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Complaints - Complaint Management System</title>
 <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
 
 <div class="page">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <h2 class="logo"><i class="fas fa-shield-alt"></i> Admin</h2>
+    <nav>
+      <a href="admin_dashboard.html">
+        <i class="fas fa-home"></i> Dashboard
+      </a>
+      <a href="complaints.html" class="active">
+        <i class="fas fa-list-ul"></i> Complaints
+      </a>
+      <a href="#" onclick="showAdminInfo(event)">
+        <i class="fas fa-user-tie"></i> Admin Info
+      </a>
+      <a href="#" onclick="logout()">
+        <i class="fas fa-sign-out-alt"></i> Logout
+      </a>
+    </nav>
+  </aside>
 
-  <!-- Top Bar -->
-  <div class="top-bar">
-    <a href="admin_dashboard.html" class="back-link">← Back to Dashboard</a>
-    <h2>All Complaints</h2>
-  </div>
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- Top Bar -->
+    <div class="top-bar">
+      <a href="admin_dashboard.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+      <h2><i class="fas fa-file-invoice-dollar"></i> All Complaints</h2>
+    </div>
 
-  <!-- Filters -->
-  <div class="filter-bar">
+    <!-- Filters -->
+    <div class="filter-bar">
+      <input 
+        type="text" 
+        id="searchBox" 
+        placeholder="🔍 Search by category or location..."
+      >
 
-    <input 
-      type="text" 
-      id="searchBox" 
-      placeholder="Search by student, category or location..."
-    >
+      <select id="statusFilter" name="statusFilter">
+        <option value="all">📊 All Status</option>
+        <option value="Pending">⏳ Pending</option>
+        <option value="In Progress">🔄 In Progress</option>
+        <option value="Resolved">✅ Resolved</option>
+      </select>
+    </div>
 
-    <select id="statusFilter" name="statusFilter">
-      <option value="all">All Status</option>
-      <option value="Pending">Pending</option>
-      <option value="In Progress">In Progress</option>
-      <option value="Resolved">Resolved</option>
-    </select>
+    <!-- Complaints will load here -->
+    <div id="complaintsContainer" class="complaintsContainer"></div>
 
-  </div>
+    <!-- Admin Info Modal -->
+    <div id="adminInfoModal" class="admin-modal" style="display: none;">
+      <div class="admin-modal-content">
+        <button class="close-modal" onclick="closeAdminInfo()">&times;</button>
+        <h2><i class="fas fa-user-tie"></i> Admin Information</h2>
+        
+        <div class="admin-info-section">
+          <div class="info-group">
+            <h3>Account Details</h3>
+            <div class="info-item">
+              <label>Admin ID:</label>
+              <span id="adminId">-</span>
+            </div>
+            <div class="info-item">
+              <label>Role:</label>
+              <span>Administrator</span>
+            </div>
+            <div class="info-item">
+              <label>Status:</label>
+              <span style="color: #27ae60;">Active</span>
+            </div>
+          </div>
 
-  <!-- Complaints will load here -->
-  <div id="complaintsContainer"></div>
+          <div class="divider-modal"></div>
+
+          <div class="logout-info-section">
+            <h3><i class="fas fa-sign-out-alt"></i> Logout</h3>
+            <p>Click the button below to securely logout from your admin account.</p>
+            <button onclick="logout()" class="logout-btn-modal">
+              <i class="fas fa-sign-out-alt"></i> Logout Now
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
 
 </div>
 
 <script src="complaints.js"></script>
+<script>
+  // Initialize page
+  document.addEventListener("DOMContentLoaded", function() {
+    if (checkAuth()) {
+      const adminId = sessionStorage.getItem("adminId");
+      document.getElementById("adminId").textContent = adminId;
+      loadComplaints();
+      
+      // Status filter
+      const statusFilter = document.getElementById("statusFilter");
+      if (statusFilter) {
+        statusFilter.addEventListener("change", function() {
+          const status = this.value;
+          if (status === "all") {
+            renderComplaints(allComplaints);
+          } else {
+            const filtered = allComplaints.filter(c => c.status === status);
+            renderComplaints(filtered);
+          }
+        });
+      }
+    }
+  });
+
+  // Show admin info modal
+  function showAdminInfo(event) {
+    if (event) {
+      event.preventDefault();
+    }
+    document.getElementById("adminInfoModal").style.display = "flex";
+  }
+
+  // Close admin info modal
+  function closeAdminInfo() {
+    document.getElementById("adminInfoModal").style.display = "none";
+  }
+
+  // Logout function
+  function logout() {
+    sessionStorage.clear();
+    window.location.href = "/index.html";
+  }
+
+  // Close modal when clicking outside
+  window.onclick = function(event) {
+    const modal = document.getElementById("adminInfoModal");
+    if (event.target === modal) {
+      closeAdminInfo();
+    }
+  }
+</script>
 
 </body>
 </html>

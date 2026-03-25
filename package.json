@@ -1,6 +1,22 @@
 {
+  "name": "complaint-management-system",
+  "version": "1.0.0",
+  "description": "College complaint management web app (student/admin).",
   "type": "module",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev": "npx nodemon backend/server.js",
+    "lint": "echo \"No linter configured yet.\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/<your-username>/<your-repo>.git"
+  },
+  "author": "",
+  "license": "MIT",
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "cors": "^2.8.6",
     "express": "^5.2.1",
     "mongodb": "^7.1.0",

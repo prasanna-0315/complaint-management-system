@@ -14,16 +14,23 @@ studentId: {
 },
   category: {
     type: String,
-enum: [
-  'Water',
-  'Road',
-  'Electricity',
-  'Food',
-  'Hostel',
-  'Library',
-  'Transport',
-  'Others'
-],
+    enum: [
+      'Water & Sanitation',
+      'Road & Infrastructure',
+      'Electricity & Power',
+      'Food & Mess',
+      'Hostel & Accommodation',
+      'Library & Resources',
+      'Transport & Vehicles',
+      'Academic & Curriculum',
+      'Faculty & Staff Conduct',
+      'Health & Medical',
+      'Safety & Security',
+      'IT & Technical',
+      'Sports & Recreation',
+      'Administrative Issues',
+      'Others'
+    ],
     required: true
   },
 
@@ -39,6 +46,19 @@ enum: [
     type: String,
     enum: ['Pending', 'In Progress', 'Resolved'],
     default: 'Pending'
+  },
+  priority: {
+    type: String,
+    enum: ['Low', 'Medium', 'High', 'Critical'],
+    default: 'Medium'
+  },
+  assignedTo: {
+    type: String,
+    default: null
+  },
+  resolution: {
+    type: String,
+    default: null
   }
 
 }, { timestamps: true });

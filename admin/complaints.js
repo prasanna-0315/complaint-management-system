@@ -1,16 +1,29 @@
 let allComplaints = [];
 
+// Check admin auth
+function checkAuth() {
+  const adminId = sessionStorage.getItem("adminId");
+  if (!adminId) {
+    window.location.href = "admin_login.html";
+    return false;
+  }
+  return true;
+}
+
 /* Load complaints from backend */
 
 async function loadComplaints(){
 
   const container = document.getElementById("complaintsContainer");
 
-  const res = await fetch("http://localhost:5000/complaint");
-
-  allComplaints = await res.json();
-
-  renderComplaints(allComplaints);
+  try {
+    const res = await fetch("http://localhost:5000/complaint");
+    allComplaints = await res.json();
+    renderComplaints(allComplaints);
+  } catch (error) {
+    console.error("Error loading complaints:", error);
+    container.innerHTML = "<p>Error loading complaints. Please check if the server is running.</p>";
+  }
 }
 
 
@@ -39,7 +52,7 @@ function renderComplaints(list){
           ${c.description}
         </div>
 
-        <small>Student: ${c.studentName}</small><br>
+        <small>Priority: ${c.priority || 'Medium'}</small><br>
         <small>ID: ${c._id}</small>
 
       </div>
@@ -70,58 +83,35 @@ function renderComplaints(list){
 
 async function updateStatus(id,status){
 
-  await fetch(`http://localhost:5000/complaint/${id}`,{
-
-    method:"PUT",
-
-    headers:{
-      "Content-Type":"application/json"
-    },
-
-    body: JSON.stringify({status})
-
-  });
-
-  loadComplaints();
+  try {
+    await fetch(`http://localhost:5000/complaint/${id}`,{
+      method:"PUT",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body: JSON.stringify({status})
+    });
+    loadComplaints();
+  } catch (error) {
+    console.error("Error updating status:", error);
+    alert("Error updating complaint status");
+  }
 }
 
 
 /* Search complaints */
 
-document.getElementById("searchBox").addEventListener("input",function(){
-
-  console.log("search:", this.value);
-  const value = this.value.toLowerCase();
-
-  const filtered = allComplaints.filter(c =>
-    c.category.toLowerCase().includes(value) ||
-    c.studentName.toLowerCase().includes(value) ||
-    c.location.toLowerCase().includes(value)
-  );
-
-  renderComplaints(filtered);
-
-});
-
-
-/* Status filter */
-
-document.getElementById("statusFilter").addEventListener("change",function(){
-
-  const selected = this.value;
-
-  if(selected === "all"){
-    renderComplaints(allComplaints);
+document.addEventListener("DOMContentLoaded", function() {
+  const searchBox = document.getElementById("searchBox");
+  if (searchBox) {
+    searchBox.addEventListener("input", function(){
+      const value = this.value.toLowerCase();
+      const filtered = allComplaints.filter(c =>
+        c.category.toLowerCase().includes(value) ||
+        c.location.toLowerCase().includes(value) ||
+        (c.priority && c.priority.toLowerCase().includes(value))
+      );
+      renderComplaints(filtered);
+    });
   }
-
-  else{
-    const filtered = allComplaints.filter(c => c.status === selected);
-    renderComplaints(filtered);
-  }
-
 });
-
-
-/* Start page */
-
-loadComplaints();

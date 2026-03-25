@@ -3,14 +3,15 @@ import Complaint from "../models/complaint.js";
 // Create complaint
 export const createComplaint = async (req, res) => {
   try {
-    const { studentName, studentId, category, location, description } = req.body;
+    const { studentName, studentId, category, location, description, priority = 'Medium' } = req.body;
 
     const complaint = await Complaint.create({
       studentName,
       studentId,
       category,
       location,
-      description
+      description,
+      priority
     });
 
     res.json(complaint);
@@ -21,10 +22,10 @@ export const createComplaint = async (req, res) => {
 };
 
 
-// Get all complaints (admin)
+// Get all complaints (admin) - hide student data
 export const getComplaints = async (req, res) => {
   try {
-    const complaints = await Complaint.find();
+    const complaints = await Complaint.find().select('-studentName -studentId');
     res.json(complaints);
   } catch (error) {
     res.status(500).json({ message: error.message });

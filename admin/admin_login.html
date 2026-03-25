@@ -2,46 +2,262 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Admin Authentication</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login - Complaint Management System</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .login-wrapper {
+      width: 100%;
+      max-width: 450px;
+      padding: 20px;
+      position: relative;
+    }
+
+    .home-btn {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background: white;
+      color: #1e3c72;
+      border: none;
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .home-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .login-card {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      padding: 50px 40px;
+      animation: slideUp 0.5s ease-out;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .logo-section {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .logo-section h1 {
+      font-size: 28px;
+      font-weight: 700;
+      color: #1e3c72;
+      margin-bottom: 10px;
+    }
+
+    .logo-section p {
+      color: #888;
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+
+    .admin-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+      color: white;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-top: 10px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      color: #333;
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      box-sizing: border-box;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: #1e3c72;
+      box-shadow: 0 0 0 3px rgba(30, 60, 114, 0.1);
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 10px;
+    }
+
+    .login-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(30, 60, 114, 0.4);
+    }
+
+    .login-btn:active {
+      transform: translateY(0);
+    }
+
+    .error-text {
+      color: #e74c3c;
+      font-size: 13px;
+      margin-top: 10px;
+      text-align: center;
+      animation: shake 0.5s ease-in-out;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+  </style>
 </head>
 <body>
 
-<div class="auth-center-wrapper">
-  <div class="auth-card">
-
-    <div id="loginForm" class="form-box">
-      <h2>Admin Login</h2>
-
-      <input type="text" id="loginUser" placeholder="Username">
-      <input type="password" id="loginPass" placeholder="Password">
-
-      <button class="primary-btn" onclick="login()">Login</button>
-      <p class="error-text" id="loginError"></p>
-
+<div class="login-wrapper">
+  <a href="/index.html" class="home-btn" title="Go to Home">
+    <i class="fas fa-home"></i>
+  </a>
+  <div class="login-card">
+    <div class="logo-section">
+      <h1>🛡️ Admin Panel</h1>
+      <p>Complaint Management System</p>
+      <div class="admin-badge">Administrator Access</div>
     </div>
 
+    <div id="loginForm" class="form-box">
+      <form onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label for="loginUser">Admin Username</label>
+          <input type="text" id="loginUser" placeholder="e.g., admin" required>
+        </div>
+
+        <div class="form-group">
+          <label for="loginPass">Password</label>
+          <input type="password" id="loginPass" placeholder="Enter your password" required>
+        </div>
+
+        <button type="submit" class="login-btn">
+          <i class="fas fa-sign-in-alt"></i> Login
+        </button>
+
+        <p class="error-text" id="loginError"></p>
+      </form>
+    </div>
   </div>
 </div>
+
 <script>
-
-function login() {
-
-  const user = document.getElementById("loginUser").value.trim();
-  const pass = document.getElementById("loginPass").value.trim();
-
-  const adminUser = "admin";
-  const adminPass = "admin123";
-
-  if (user === adminUser && pass === adminPass) {
-    window.location.href = "admin_dashboard.html";
-  } else {
-    document.getElementById("loginError").textContent =
-      "Invalid username or password.";
-  }
-
+function handleLogin(event) {
+  event.preventDefault();
+  login();
 }
 
+async function login() {
+  const adminId = document.getElementById("loginUser").value.trim();
+  const password = document.getElementById("loginPass").value.trim();
+  const loginError = document.getElementById("loginError");
+
+  if (!adminId || !password) {
+    loginError.textContent = "❌ Please enter both username and password";
+    return;
+  }
+
+  try {
+    const response = await fetch("http://localhost:5000/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ studentId: adminId, password })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      loginError.textContent = "❌ " + (data.message || "Invalid credentials");
+      return;
+    }
+
+    // Check if user is admin
+    if (data.role !== 'admin') {
+      loginError.textContent = "❌ Access denied. Admin only.";
+      return;
+    }
+
+    // Store admin info in session
+    sessionStorage.setItem("adminId", data.studentId);
+    sessionStorage.setItem("role", data.role);
+
+    // Redirect to dashboard
+    setTimeout(() => {
+      window.location.href = "admin_dashboard.html";
+    }, 500);
+  } catch (error) {
+    loginError.textContent = "❌ Connection error. Please try again.";
+    console.error("Login error:", error);
+  }
+}
+
+// Allow Enter key for login
+document.addEventListener("DOMContentLoaded", function() {
+  document.getElementById("loginPass").addEventListener("keypress", function(event) {
+    if (event.key === "Enter") {
+      login();
+    }
+  });
+});
 </script>
 
 </body>

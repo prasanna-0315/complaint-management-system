@@ -1,82 +1,131 @@
 /* Student Dashboard Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f8f9fa;
+}
 
 /* Base styles for student dashboard */
 .student-dashboard {
   display: flex;
   min-height: 100vh;
-  background: #f1f5f9;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
 }
 
+/* Sidebar Styles */
 .student-sidebar {
-  width: 230px;
-  background: #1e293b;
+  width: 260px;
+  background: linear-gradient(180deg, #1e1e2e 0%, #16213e 100%);
   color: white;
   padding: 25px 20px;
+  box-shadow: 4px 0 15px rgba(0, 0, 0, 0.2);
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
 }
 
 .student-sidebar .logo {
-  font-size: 22px;
+  font-size: 26px;
   margin-bottom: 30px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
 }
 
 .student-sidebar nav a {
-  display: block;
-  padding: 12px;
-  margin-bottom: 10px;
-  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  margin-bottom: 8px;
+  border-radius: 10px;
   color: #cbd5f5;
   text-decoration: none;
   cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 15px;
 }
 
 .student-sidebar nav a:hover,
 .student-sidebar nav a.active {
-  background: #2563eb;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
+  padding-left: 20px;
 }
 
+/* Main Content */
 .student-main {
   flex: 1;
   padding: 30px;
+  overflow-y: auto;
 }
 
 .student-top-bar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px;
+  margin-bottom: 40px;
+  background: white;
+  padding: 20px 30px;
+  border-radius: 16px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
 }
 
 .student-top-bar h1 {
-  font-size: 26px;
-  color: #0f172a;
+  font-size: 28px;
+  font-weight: 700;
+  color: #1e1e2e;
 }
 
 .student-name {
-  font-size: 14px;
-  color: #475569;
+  font-size: 15px;
+  color: #667eea;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
+/* Tab Buttons */
 .dashboard-tabs {
   display: flex;
   gap: 15px;
-  margin-bottom: 25px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
 }
 
 .tab-btn {
-  padding: 12px 24px;
+  padding: 12px 28px;
   border: none;
   background: white;
-  border-radius: 8px;
+  border-radius: 12px;
   cursor: pointer;
   font-size: 15px;
-  font-weight: 500;
+  font-weight: 600;
   color: #64748b;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tab-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
 }
 
 .tab-btn.active {
-  background: #2563eb;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
 }
 
@@ -86,18 +135,293 @@
 
 .tab-content.active {
   display: block;
+  animation: fadeInUp 0.3s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Complaint Form Styles */
 .complaint-form-card {
   background: white;
-  padding: 30px;
-  border-radius: 16px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-  max-width: 600px;
+  padding: 40px;
+  border-radius: 18px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  max-width: 700px;
 }
 
 .complaint-form-card h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1e1e2e;
+  margin-bottom: 25px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.form-group {
+  margin-bottom: 24px;
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(102, 126, 234, 0.4);
+}
+
+.success-message {
+  background-color: #d4edda;
+  color: #155724;
+  padding: 14px 16px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  display: none;
+  border-left: 4px solid #28a745;
+}
+
+/* Status Search Card */
+.status-search-card {
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  margin-bottom: 30px;
+}
+
+.status-search-card h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1e1e2e;
+  margin-bottom: 20px;
+}
+
+.search-group {
+  display: flex;
+  gap: 10px;
+}
+
+.search-group input {
+  flex: 1;
+  padding: 12px 16px;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 14px;
+}
+
+.search-group input:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.search-btn {
+  padding: 12px 30px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.search-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+/* Complaint Result */
+.complaint-result {
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  margin-bottom: 30px;
+  display: none;
+}
+
+.complaint-result h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1e1e2e;
+  margin-bottom: 20px;
+}
+
+.result-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 14px;
+}
+
+.result-item .label {
+  font-weight: 600;
+  color: #667eea;
+  min-width: 120px;
+}
+
+.result-item .value {
+  color: #333;
+  word-break: break-word;
+}
+
+.result-status {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.result-status.pending {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.result-status.in-progress {
+  background: #cfe2ff;
+  color: #084298;
+}
+
+.result-status.resolved {
+  background: #d4edda;
+  color: #155724;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #333;
+  font-weight: 600;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+/* My Complaints Section */
+.my-complaints-section {
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.my-complaints-section h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1e1e2e;
+  margin-bottom: 25px;
+}
+
+.complaint-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.complaint-card {
+  background: linear-gradient(135deg, #f8f9fa 0%, #f0f0f5 100%);
+  border: 2px solid #e0e0e0;
+  padding: 20px;
+  border-radius: 14px;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.complaint-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+  border-color: #667eea;
+}
+
+.complaint-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  margin-bottom: 15px;
+  gap: 10px;
+}
+
+.complaint-card-header h4 {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1e1e2e;
+  flex: 1;
+  word-break: break-word;
+}
+
+.complaint-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.complaint-card-body div {
+  font-size: 13px;
+  color: #666;
+}
+
+.complaint-card-body strong {
+  color: #333;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  color: #999;
+  font-size: 15px;
+}
   font-size: 22px;
   color: #0f172a;
   margin-bottom: 25px;
@@ -313,6 +637,159 @@
   text-align: center;
   padding: 40px;
   color: #64748b;
+}
+
+/* Profile Tab Styles */
+.profile-card {
+  background: white;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.profile-card h2 {
+  font-size: 26px;
+  color: #0f172a;
+  margin-bottom: 30px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.profile-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.profile-info-box,
+.password-section,
+.logout-section {
+  padding: 25px 0;
+}
+
+.profile-info-box h3,
+.password-section h3,
+.logout-section h3 {
+  font-size: 18px;
+  color: #1e1e2e;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 14px;
+}
+
+.info-row:last-child {
+  border-bottom: none;
+}
+
+.info-row label {
+  font-weight: 600;
+  color: #667eea;
+  min-width: 150px;
+}
+
+.info-row span {
+  color: #333;
+}
+
+.divider {
+  height: 1px;
+  background: linear-gradient(to right, #667eea, transparent);
+  margin: 20px 0;
+}
+
+.password-section form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.change-pass-btn,
+.logout-btn {
+  padding: 14px 30px;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.change-pass-btn {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  margin-top: 10px;
+}
+
+.change-pass-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+}
+
+.logout-btn {
+  background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
+  color: white;
+  padding: 14px 30px;
+  width: 100%;
+  max-width: 200px;
+}
+
+.logout-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(255, 107, 107, 0.4);
+}
+
+.logout-section p {
+  color: #666;
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+
+
+  border-left: 4px solid #e74c3c;
+}
+
+@media (max-width: 768px) {
+  .profile-card {
+    padding: 20px;
+  }
+
+  .profile-card h2 {
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+
+  .info-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .info-row label {
+    min-width: auto;
+  }
+
+  .profile-info-box h3,
+  .password-section h3,
+  .logout-section h3 {
+    font-size: 16px;
+  }
 }
 
 /* Student Login Styles */

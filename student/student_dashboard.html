@@ -2,19 +2,31 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Student Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Dashboard - Complaint Management System</title>
   <link rel="stylesheet" href="student.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
 <div class="student-dashboard">
   <!-- SIDEBAR -->
   <aside class="student-sidebar">
-    <h2 class="logo">Student Panel</h2>
+    <h2 class="logo"><i class="fas fa-file-invoice"></i> CMS</h2>
     <nav>
-      <a href="#" class="active" onclick="showTab('raise')">Raise Complaint</a>
-      <a href="#" onclick="showTab('track')">Track Status</a>
-      <a href="student_login.html">Logout</a>
+      <a href="#" class="active" onclick="showTab(event, 'raise')">
+        <i class="fas fa-pencil-alt"></i> Raise Complaint
+      </a>
+      <a href="#" onclick="showTab(event, 'track')">
+        <i class="fas fa-search"></i> Track Status
+      </a>
+      
+      <a href="#" onclick="showTab(event, 'profile')">
+        <i class="fas fa-user-circle"></i> Profile
+      </a>
+      <a href="#" onclick="logout()">
+        <i class="fas fa-sign-out-alt"></i> Logout
+      </a>
     </nav>
   </aside>
 
@@ -22,38 +34,56 @@
   <main class="student-main">
     <!-- HEADER -->
     <header class="student-top-bar">
-      <h1>Dashboard</h1>
-      <span class="student-name" id="studentName">Welcome, Student</span>
+      <h1><i class="fas fa-th-large"></i> Dashboard</h1>
+      <span class="student-name" id="studentName">
+        <i class="fas fa-user-circle"></i> Welcome, Student
+      </span>
     </header>
 
     <!-- TABS -->
     <div class="dashboard-tabs">
-      <button class="tab-btn active" onclick="showTab('raise')">Raise Complaint</button>
-      <button class="tab-btn" onclick="showTab('track')">Track Status</button>
+      <button class="tab-btn active" onclick="showTab(event, 'raise')">
+        <i class="fas fa-plus-circle"></i> Raise Complaint
+      </button>
+      <button class="tab-btn" onclick="showTab(event, 'track')">
+        <i class="fas fa-list"></i> Track Status
+      </button>
+      <button class="tab-btn" onclick="showTab(event, 'profile')">
+        <i class="fas fa-user"></i> Profile
+      </button>
     </div>
 
     <!-- RAISE COMPLAINT TAB -->
     <div id="raiseTab" class="tab-content active">
       <div class="complaint-form-card">
-        <h2>Submit a Complaint</h2>
+        <h2><i class="fas fa-exclamation-circle"></i> Submit a Complaint</h2>
         
         <div class="success-message" id="successMessage">
-          Complaint submitted successfully! Your complaint ID will be generated.
+          <i class="fas fa-check-circle"></i> Complaint submitted successfully! Your complaint ID is shown above.
         </div>
 
         <form id="complaintForm" onsubmit="submitComplaint(event)">
           <div class="form-group">
-            <label for="complaintType">Type of Complaint *</label>
+            <label for="complaintType"><i class="fas fa-tag"></i> Type of Complaint *</label>
             <select id="complaintType" required>
               <option value="">Select complaint type</option>
-              <option value="Water">Water</option>
-              <option value="Road">Road</option>
-              <option value="Electricity">Electricity</option>
-              <option value="Food">Food</option>
-              <option value="Hostel">Hostel</option>
-              <option value="Library">Library</option>
-              <option value="Transport">Transport</option>
-              <option value="Others">Others</option>
+              <option value="Water & Sanitation">💧 Water & Sanitation</option>
+              <option value="Road & Infrastructure">🛣️ Road & Infrastructure</option>
+              <option value="Water & Sanitation">💧 Water & Sanitation</option>
+              <option value="Road & Infrastructure">🛣️ Road & Infrastructure</option>
+              <option value="Electricity & Power">⚡ Electricity & Power</option>
+              <option value="Food & Mess">🍽️ Food & Mess</option>
+              <option value="Hostel & Accommodation">🏠 Hostel & Accommodation</option>
+              <option value="Library & Resources">📚 Library & Resources</option>
+              <option value="Transport & Vehicles">🚌 Transport & Vehicles</option>
+              <option value="Academic & Curriculum">📖 Academic & Curriculum</option>
+              <option value="Faculty & Staff Conduct">👨‍🏫 Faculty & Staff Conduct</option>
+              <option value="Health & Medical">🏥 Health & Medical</option>
+              <option value="Safety & Security">🔒 Safety & Security</option>
+              <option value="IT & Technical">💻 IT & Technical</option>
+              <option value="Sports & Recreation">⚽ Sports & Recreation</option>
+              <option value="Administrative Issues">📋 Administrative Issues</option>
+              <option value="Others">❓ Others</option>
             </select>
           </div>
 
@@ -107,6 +137,10 @@
           <span class="value" id="resultDate">-</span>
         </div>
         <div class="result-item">
+          <span class="label">Priority:</span>
+          <span class="value" id="resultPriority">-</span>
+        </div>
+        <div class="result-item">
           <span class="label">Status:</span>
           <span class="result-status" id="resultStatus">-</span>
         </div>
@@ -121,25 +155,107 @@
       </div>
     </div>
 
+    <!-- PROFILE TAB -->
+    <div id="profileTab" class="tab-content">
+      <div class="profile-card">
+        <h2><i class="fas fa-user-circle"></i> Profile</h2>
+        
+        <div class="profile-section">
+          <div class="profile-info-box">
+            <h3>Account Information</h3>
+            <div class="info-row">
+              <label>Student ID:</label>
+              <span id="profileStudentId">-</span>
+            </div>
+            <div class="info-row">
+              <label>Role:</label>
+              <span>Student</span>
+            </div>
+            <div class="info-row">
+              <label>Status:</label>
+              <span style="color: #27ae60;">Active</span>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="password-section">
+            <h3><i class="fas fa-lock"></i> Change Password</h3>
+            <form id="changePasswordForm" onsubmit="handleChangePassword(event)">
+              <div class="form-group">
+                <label for="currentPassword">Current Password</label>
+                <input type="password" id="currentPassword" placeholder="Enter your current password" required>
+                <small id="currentPassError" style="color: #e74c3c;"></small>
+              </div>
+
+              <div class="form-group">
+                <label for="newPassword">New Password</label>
+                <input type="password" id="newPassword" placeholder="Enter new password (min 6 characters)" required minlength="6">
+                <small style="color: #666;">Password must be at least 6 characters long</small>
+              </div>
+
+              <div class="form-group">
+                <label for="confirmPassword">Confirm Password</label>
+                <input type="password" id="confirmPassword" placeholder="Confirm your new password" required>
+                <small id="confirmPassError" style="color: #e74c3c;"></small>
+              </div>
+
+              <button type="submit" class="change-pass-btn">
+                <i class="fas fa-check-circle"></i> Update Password
+              </button>
+              <small id="passwordMessage" style="display: block; margin-top: 10px; text-align: center;"></small>
+            </form>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="logout-section">
+            <h3>Logout</h3>
+            <p>Sign out from your account</p>
+            <button onclick="logout()" class="logout-btn">
+              <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </main>
 </div>
 
 <script src="student.js"></script>
 <script>
-  // Display student name
-  const studentName = sessionStorage.getItem("currentStudent");
-  if (studentName) {
-    document.getElementById("studentName").textContent = "Welcome, " + studentName;
-  } else {
-    // Redirect to login if not logged in
-    window.location.href = "student_login.html";
+  // Check authentication
+  function checkAuth() {
+    const studentId = sessionStorage.getItem("studentId");
+    if (!studentId) {
+      window.location.href = "student_login.html";
+      return false;
+    }
+    return true;
   }
 
+  // Initialize
+  document.addEventListener("DOMContentLoaded", function() {
+    if (!checkAuth()) return;
+    
+    const studentId = sessionStorage.getItem("studentId");
+    document.getElementById("studentName").textContent = "Welcome, " + studentId;
+  });
+
   // Tab switching
-  function showTab(tabName) {
+  function showTab(event, tabName) {
+    if (event) {
+      event.preventDefault();
+    }
+    
     // Update tab buttons
     document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-    event.target.classList.add('active');
+    document.querySelectorAll('.student-sidebar nav a').forEach(a => a.classList.remove('active'));
+    
+    if (event && event.target) {
+      event.target.classList.add('active');
+    }
 
     // Update tab content
     document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
@@ -149,22 +265,132 @@
     if (tabName === 'track') {
       loadMyComplaints();
     }
+
+    // Load profile if profile tab
+    if (tabName === 'profile') {
+      loadProfileData();
+    }
+  }
+
+  // Load profile data
+  function loadProfileData() {
+    const studentId = sessionStorage.getItem("studentId");
+    document.getElementById('profileStudentId').textContent = studentId || 'N/A';
+  }
+
+  // Handle change password
+  async function handleChangePassword(event) {
+    event.preventDefault();
+
+    const studentId = sessionStorage.getItem("studentId");
+    const currentPassword = document.getElementById("currentPassword").value;
+    const newPassword = document.getElementById("newPassword").value;
+    const confirmPassword = document.getElementById("confirmPassword").value;
+
+    // Client-side validation
+    if (newPassword.length < 6) {
+      document.getElementById("passwordMessage").textContent = "Password must be at least 6 characters";
+      document.getElementById("passwordMessage").style.color = "#e74c3c";
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      document.getElementById("confirmPassError").textContent = "Passwords do not match";
+      return;
+    }
+
+    if (newPassword === currentPassword) {
+      document.getElementById("passwordMessage").textContent = "New password must be different from current password";
+      document.getElementById("passwordMessage").style.color = "#e74c3c";
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:5000/change-password", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          studentId: studentId,
+          oldPassword: currentPassword,
+          newPassword: newPassword
+        })
+      });
+
+      if (response.ok) {
+        document.getElementById("passwordMessage").textContent = "✓ Password changed successfully!";
+        document.getElementById("passwordMessage").style.color = "#27ae60";
+        document.getElementById("changePasswordForm").reset();
+        
+        // Clear error messages
+        document.getElementById("currentPassError").textContent = "";
+        document.getElementById("confirmPassError").textContent = "";
+        
+        // Redirect to login after 2 seconds for security
+        setTimeout(() => {
+          logout();
+        }, 2000);
+      } else {
+        const error = await response.json();
+        document.getElementById("currentPassError").textContent = error.message || "Invalid current password";
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      document.getElementById("passwordMessage").textContent = "Error changing password. Server might be down.";
+      document.getElementById("passwordMessage").style.color = "#e74c3c";
+    }
+  }
+
+  // Logout function
+  function logout() {
+    sessionStorage.clear();
+    window.location.href = "/index.html";
   }
 
   // Submit complaint
   async function submitComplaint(event) {
     event.preventDefault();
 
-    const studentName = sessionStorage.getItem("currentStudent");
-    const studentId = sessionStorage.getItem("currentStudentId");
-    
+    const studentId = sessionStorage.getItem("studentId");
+    if (!studentId) {
+      alert("Student not logged in. Please login again.");
+      window.location.href = "student_login.html";
+      return;
+    }
+
+    const complaintTypeEl = document.getElementById("complaintType");
+    const locationEl = document.getElementById("location");
+    const descriptionEl = document.getElementById("description");
+
+    const category = complaintTypeEl?.value?.trim();
+    const location = locationEl?.value?.trim();
+    const description = descriptionEl?.value?.trim();
+
+    if (!category) {
+      alert("Please select a complaint type");
+      return;
+    }
+
+    if (!location) {
+      alert("Please enter location");
+      return;
+    }
+
+    if (!description) {
+      alert("Please enter description");
+      return;
+    }
+
     const complaintData = {
-      studentName: studentName,
+      studentName: studentId,
       studentId: studentId,
-      category: document.getElementById("complaintType").value,
-      location: document.getElementById("location").value,
-      description: document.getElementById("description").value
+      category,
+      location,
+      description
     };
+
+    console.log("Submitting complaint:", complaintData);
 
     try {
       const response = await fetch("http://localhost:5000/complaint", {
@@ -175,24 +401,13 @@
         body: JSON.stringify(complaintData)
       });
 
-      const result = await response.json();
-
       if (response.ok) {
+        const result = await response.json();
+        
         // Show success message
         document.getElementById("successMessage").style.display = "block";
+        document.getElementById("successMessage").textContent = `✓ Complaint submitted successfully! ID: ${result._id}`;
         
-        // Save to local storage for tracking
-        const complaints = JSON.parse(localStorage.getItem("myComplaints") || "[]");
-        complaints.push({
-          _id: result._id,
-          category: complaintData.category,
-          location: complaintData.location,
-          description: complaintData.description,
-          status: result.status || "Pending",
-          createdAt: new Date().toISOString()
-        });
-        localStorage.setItem("myComplaints", JSON.stringify(complaints));
-
         // Reset form
         document.getElementById("complaintForm").reset();
 
@@ -201,11 +416,19 @@
           document.getElementById("successMessage").style.display = "none";
         }, 3000);
       } else {
-        alert("Failed to submit complaint. Please try again.");
+        let errorText = "Unknown error";
+        try { 
+          const error = await response.json();
+          errorText = error.message || JSON.stringify(error);
+        } catch {
+          errorText = response.statusText || "Server returned an error";
+        }
+        alert("Failed to submit complaint: " + errorText);
+        console.error("Complaint API error:", response.status, response.statusText, errorText);
       }
     } catch (error) {
       console.error("Error:", error);
-      alert("Error submitting complaint. Please check if the server is running.");
+      alert("Error submitting complaint. Please check if the server is running and CORS is enabled.");
     }
   }
 
@@ -219,16 +442,25 @@
     }
 
     try {
-      const response = await fetch("http://localhost:5000/complaint/" + complaintId);
+      const studentId = sessionStorage.getItem("studentId");
+      const response = await fetch(`http://localhost:5000/complaint/student/${studentId}`);
       
       if (response.ok) {
-        const complaint = await response.json();
+        const complaints = await response.json();
+        const complaint = complaints.find(c => c._id === complaintId);
+        
+        if (!complaint) {
+          alert("Complaint not found!");
+          document.getElementById("complaintResult").style.display = "none";
+          return;
+        }
         
         document.getElementById("resultId").textContent = complaint._id;
         document.getElementById("resultType").textContent = complaint.category;
         document.getElementById("resultLocation").textContent = complaint.location || "-";
         document.getElementById("resultDescription").textContent = complaint.description;
         document.getElementById("resultDate").textContent = new Date(complaint.createdAt).toLocaleDateString();
+        document.getElementById("resultPriority").textContent = complaint.priority || "-";
         
         const statusEl = document.getElementById("resultStatus");
         statusEl.textContent = complaint.status;
@@ -236,8 +468,7 @@
         
         document.getElementById("complaintResult").style.display = "block";
       } else {
-        alert("Complaint not found!");
-        document.getElementById("complaintResult").style.display = "none";
+        alert("Error searching complaint!");
       }
     } catch (error) {
       console.error("Error:", error);
@@ -246,38 +477,40 @@
   }
 
   // Load my complaints
- async function loadMyComplaints() {
-  const studentId = sessionStorage.getItem("currentStudentId");
+  async function loadMyComplaints() {
+    const studentId = sessionStorage.getItem("studentId");
+    const container = document.getElementById("myComplaintsList");
 
-  const container = document.getElementById("myComplaintsList");
+    try {
+      const response = await fetch(`http://localhost:5000/complaint/student/${studentId}`);
+      const complaints = await response.json();
 
-  try {
-    const response = await fetch("http://localhost:5000/complaint/student/" + studentId);
-    const complaints = await response.json();
+      if (complaints.length === 0) {
+        container.innerHTML = '<div class="empty-state">No complaints found. Submit your first complaint!</div>';
+        return;
+      }
 
-    if (complaints.length === 0) {
-      container.innerHTML = '<div class="empty-state">No complaints found. Submit your first complaint!</div>';
-      return;
+      container.innerHTML = complaints.map(complaint => `
+        <div class="complaint-card">
+          <div class="complaint-card-header">
+            <h4>${complaint.category} - ${complaint.location || 'N/A'}</h4>
+            <span class="result-status ${complaint.status.toLowerCase().replace(' ', '-')}">${complaint.status}</span>
+          </div>
+          <div class="complaint-card-body">
+            <div><strong>ID:</strong> ${complaint._id}</div>
+            <div><strong>Date:</strong> ${new Date(complaint.createdAt).toLocaleDateString()}</div>
+            <div><strong>Priority:</strong> ${complaint.priority || 'Medium'}</div>
+          </div>
+        </div>
+      `).join('');
+
+    } catch (error) {
+      console.error("Error loading complaints:", error);
+      container.innerHTML = '<div class="empty-state">Error loading complaints.</div>';
     }
-
-    container.innerHTML = complaints.map(complaint => `
-      <div class="complaint-card">
-        <div class="complaint-card-header">
-          <h4>${complaint.category} - ${complaint.location || 'N/A'}</h4>
-          <span class="result-status ${complaint.status.toLowerCase().replace(' ', '-')}">${complaint.status}</span>
-        </div>
-        <div class="complaint-card-body">
-          <div>ID: ${complaint._id}</div>
-          <div>Date: ${new Date(complaint.createdAt).toLocaleDateString()}</div>
-        </div>
-      </div>
-    `).join('');
-
-  } catch (error) {
-    console.error("Error loading complaints:", error);
-    container.innerHTML = '<div class="empty-state">Error loading complaints.</div>';
   }
-}
+
+
 </script>
 
 </body>

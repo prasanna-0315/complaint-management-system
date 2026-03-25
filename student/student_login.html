@@ -2,103 +2,444 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Student Authentication</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Login - Complaint Management System</title>
   <link rel="stylesheet" href="student.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .login-wrapper {
+      width: 100%;
+      max-width: 450px;
+      padding: 20px;
+      position: relative;
+    }
+
+    .home-btn {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background: white;
+      color: #667eea;
+      border: none;
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .home-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .login-card {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      padding: 50px 40px;
+      animation: slideUp 0.5s ease-out;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .logo-section {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .logo-section h1 {
+      font-size: 28px;
+      font-weight: 700;
+      color: #667eea;
+      margin-bottom: 10px;
+    }
+
+    .logo-section p {
+      color: #888;
+      font-size: 14px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      color: #333;
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      box-sizing: border-box;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 10px;
+    }
+
+    .login-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+    }
+
+    .login-btn:active {
+      transform: translateY(0);
+    }
+
+    .error-text {
+      color: #e74c3c;
+      font-size: 13px;
+      margin-top: 10px;
+      text-align: center;
+      animation: shake 0.5s ease-in-out;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .modal-content {
+      background-color: #fff;
+      margin: 10% auto;
+      padding: 40px;
+      border-radius: 20px;
+      width: 90%;
+      max-width: 450px;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.3);
+      animation: modalSlideIn 0.3s ease-out;
+    }
+
+    @keyframes modalSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .modal h2 {
+      margin-bottom: 10px;
+      color: #333;
+      font-size: 24px;
+    }
+
+    .warning-text {
+      background-color: #fff3cd;
+      border: 1px solid #ffc107;
+      padding: 12px 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      font-size: 13px;
+      color: #856404;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .modal-input {
+      width: 100%;
+      padding: 12px 15px;
+      margin: 12px 0;
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      box-sizing: border-box;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+
+    .modal-input:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .modal-btn {
+      width: 100%;
+      padding: 14px;
+      margin-top: 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+
+    .modal-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+    }
+
+    .modal-error {
+      color: #e74c3c;
+      font-size: 13px;
+      margin-top: 15px;
+      text-align: center;
+    }
+
+    .success-message {
+      background-color: #d4edda;
+      border: 1px solid #28a745;
+      padding: 12px 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      font-size: 13px;
+      color: #155724;
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
 
-<div class="auth-center-wrapper">
-  <div class="auth-card">
-
-    <!-- Tabs -->
-    <div class="auth-tabs">
-      <button class="tab active" onclick="showLogin()">Login</button>
-      <button class="tab" onclick="showRegister()">Register</button>
+<div class="login-wrapper">
+  <a href="../index.html" class="home-btn" title="Go to Home">
+    <i class="fas fa-home"></i>
+  </a>
+  <div class="login-card">
+    <div class="logo-section">
+      <h1>📋 CMS</h1>
+      <p>Complaint Management System</p>
     </div>
 
-    <!-- LOGIN -->
     <div id="loginForm" class="form-box">
-      <h2>Student Login</h2>
+      <form onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label for="loginUser">Student ID (Roll No.)</label>
+          <input type="text" id="loginUser" placeholder="e.g., CS2021001" required>
+        </div>
 
-      <input type="text" id="loginUser" placeholder="Student ID">
-      <input type="password" id="loginPass" placeholder="Password">
+        <div class="form-group">
+          <label for="loginPass">Password</label>
+          <input type="password" id="loginPass" placeholder="Enter your password" required>
+        </div>
 
-      <button class="primary-btn" onclick="login()">Login</button>
-      <p class="error-text" id="loginError"></p>
+        <button type="submit" class="login-btn">
+          <i class="fas fa-sign-in-alt"></i> Login
+        </button>
+
+        <p class="error-text" id="loginError"></p>
+      </form>
     </div>
+  </div>
+</div>
 
-    <!-- REGISTER -->
-    <div id="registerForm" class="form-box hidden">
-      <h2>Student Registration</h2>
+<!-- Password Change Modal -->
+<div id="changePasswordModal" class="modal">
+  <div class="modal-content">
+    <h2><i class="fas fa-lock"></i> Change Password</h2>
+    <p class="warning-text">
+      <i class="fas fa-info-circle"></i>
+      This is your first login. You must change your password before accessing the dashboard.
+    </p>
 
-      <input type="text" id="regUser" placeholder="Student ID">
-      <input type="password" id="regPass" placeholder="Password">
-      <input type="text" id="regName" placeholder="Full Name">
+    <input type="password" id="oldPassword" class="modal-input" placeholder="Current Password" required>
+    <input type="password" id="newPassword" class="modal-input" placeholder="New Password (min 6 chars)" required>
+    <input type="password" id="confirmPassword" class="modal-input" placeholder="Confirm New Password" required>
 
-      <button class="primary-btn" onclick="register()">Register</button>
-      <p class="success-text" id="registerMsg"></p>
-    </div>
-
+    <button class="modal-btn" onclick="confirmPasswordChange()">
+      <i class="fas fa-check"></i> Change Password
+    </button>
+    <p class="modal-error" id="changeError"></p>
   </div>
 </div>
 
 <script>
-function showLogin() {
-  loginForm.classList.remove("hidden");
-  registerForm.classList.add("hidden");
-  document.querySelectorAll(".tab")[0].classList.add("active");
-  document.querySelectorAll(".tab")[1].classList.remove("active");
+function handleLogin(event) {
+  event.preventDefault();
+  login();
 }
 
-function showRegister() {
-  registerForm.classList.remove("hidden");
-  loginForm.classList.add("hidden");
-  document.querySelectorAll(".tab")[1].classList.add("active");
-  document.querySelectorAll(".tab")[0].classList.remove("active");
-}
+async function login() {
+  const studentId = document.getElementById("loginUser").value.trim();
+  const password = document.getElementById("loginPass").value.trim();
+  const loginError = document.getElementById("loginError");
 
-function register() {
-  const user = regUser.value.trim();
-  const pass = regPass.value.trim();
-  const name = regName.value.trim();
-
-  if (!user || !pass || !name) {
-    registerMsg.textContent = "All fields are required";
+  if (!studentId || !password) {
+    loginError.textContent = "❌ Please enter both Student ID and Password";
     return;
   }
 
-  localStorage.setItem("studentUser", user);
-  localStorage.setItem("studentPass", pass);
-  localStorage.setItem("studentName", name);
+  try {
+    const response = await fetch("http://localhost:5000/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ studentId, password })
+    });
 
-  registerMsg.textContent = "Registration successful. Please login.";
-  regUser.value = "";
-  regPass.value = "";
-  regName.value = "";
+    const data = await response.json();
+
+    if (!response.ok) {
+      loginError.textContent = "❌ " + (data.message || "Invalid credentials");
+      return;
+    }
+
+    // Store login info in session
+    sessionStorage.setItem("studentId", data.studentId);
+    sessionStorage.setItem("role", data.role);
+    sessionStorage.setItem("firstLogin", data.firstLogin);
+
+    // If first login, show password change modal
+    if (data.firstLogin) {
+      document.getElementById("loginForm").style.display = "none";
+      document.getElementById("changePasswordModal").style.display = "block";
+    } else {
+      // Go to dashboard
+      setTimeout(() => {
+        window.location.href = "student_dashboard.html";
+      }, 500);
+    }
+  } catch (error) {
+    loginError.textContent = "❌ Connection error. Please try again.";
+    console.error("Login error:", error);
+  }
 }
 
-function login() {
-  const storedUser = localStorage.getItem("studentUser");
-  const storedPass = localStorage.getItem("studentPass");
-  const storedName = localStorage.getItem("studentName");
+async function confirmPasswordChange() {
+  const studentId = sessionStorage.getItem("studentId");
+  const oldPassword = document.getElementById("oldPassword").value.trim();
+  const newPassword = document.getElementById("newPassword").value.trim();
+  const confirmPassword = document.getElementById("confirmPassword").value.trim();
+  const changeError = document.getElementById("changeError");
 
-  const user = loginUser.value.trim();
-  const pass = loginPass.value.trim();
+  changeError.textContent = "";
 
-  if (!storedUser || !storedPass) {
-    loginError.textContent = "No user registered. Please register first.";
+  // Validation
+  if (!oldPassword || !newPassword || !confirmPassword) {
+    changeError.textContent = "❌ All fields are required";
     return;
   }
 
-  if (user === storedUser && pass === storedPass) {
-    // Store current student info for session
-    sessionStorage.setItem("currentStudent", storedName);
-    sessionStorage.setItem("currentStudentId", storedUser);
-    window.location.href = "student_dashboard.html";
-  } else {
-    loginError.textContent = "Invalid student ID or password.";
+  if (newPassword !== confirmPassword) {
+    changeError.textContent = "❌ New passwords do not match";
+    return;
+  }
+
+  if (newPassword.length < 6) {
+    changeError.textContent = "❌ New password must be at least 6 characters";
+    return;
+  }
+
+  if (oldPassword === newPassword) {
+    changeError.textContent = "❌ New password must be different from current password";
+    return;
+  }
+
+  try {
+    const response = await fetch("http://localhost:5000/change-password", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ studentId, oldPassword, newPassword })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      changeError.textContent = "❌ " + (data.message || "Error changing password");
+      return;
+    }
+
+    // Success - show message and redirect
+    changeError.textContent = "✓ Password changed successfully! Redirecting...";
+    changeError.style.color = "#28a745";
+    
+    setTimeout(() => {
+      window.location.href = "student_dashboard.html";
+    }, 1500);
+  } catch (error) {
+    changeError.textContent = "❌ Connection error. Please try again.";
+    console.error("Password change error:", error);
   }
 }
+
+// Allow Enter key for password fields
+document.addEventListener("DOMContentLoaded", function() {
+  const confirmBtn = document.querySelector(".modal-btn");
+  document.getElementById("confirmPassword").addEventListener("keypress", function(event) {
+    if (event.key === "Enter") {
+      confirmPasswordChange();
+    }
+  });
+});
 </script>
 
 </body>

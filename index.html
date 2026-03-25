@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complaint Management System - Home</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            text-align: center;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo-section {
+            margin-bottom: 60px;
+        }
+
+        .logo-section i {
+            font-size: 80px;
+            color: white;
+            margin-bottom: 20px;
+            display: block;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        h1 {
+            color: white;
+            font-size: 48px;
+            margin-bottom: 10px;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 18px;
+            margin-bottom: 50px;
+            font-weight: 300;
+        }
+
+        .portal-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .portal-card {
+            background: white;
+            border-radius: 20px;
+            padding: 50px 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .portal-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+        }
+
+        .portal-card.student {
+            border-top: 5px solid #667eea;
+        }
+
+        .portal-card.admin {
+            border-top: 5px solid #1e3c72;
+        }
+
+        .portal-card i {
+            font-size: 60px;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .portal-card.student i {
+            color: #667eea;
+        }
+
+        .portal-card.admin i {
+            color: #1e3c72;
+        }
+
+        .portal-card h2 {
+            font-size: 32px;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .portal-card p {
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 14px 40px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-student {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-student:hover {
+            background: linear-gradient(135deg, #764ba2, #667eea);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-admin {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
+        }
+
+        .btn-admin:hover {
+            background: linear-gradient(135deg, #2a5298, #1e3c72);
+            box-shadow: 0 10px 30px rgba(30, 60, 114, 0.4);
+        }
+
+        .features {
+            margin-top: 40px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .features-list {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .feature-item i {
+            font-size: 18px;
+            color: #FFD700;
+        }
+
+        .footer {
+            margin-top: 80px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .portal-section {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            h1 {
+                font-size: 36px;
+            }
+
+            .logo-section i {
+                font-size: 60px;
+            }
+
+            .portal-card {
+                padding: 40px 20px;
+            }
+
+            .portal-card h2 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo-section">
+            <i class="fas fa-graduation-cap"></i>
+            <h1>Complaint Management System</h1>
+            <p class="subtitle">Efficient Complaint Management & Resolution</p>
+        </div>
+
+        <div class="portal-section">
+            <!-- Student Portal -->
+            <a href="/student/student_login.html" class="portal-card student">
+                <i class="fas fa-user-graduate"></i>
+                <h2>Student Portal</h2>
+                <p>Log in as a student to raise complaints, track status, and manage your account.</p>
+                <button class="btn btn-student">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </button>
+            </a>
+
+            <!-- Admin Portal -->
+            <a href="/admin/admin_login.html" class="portal-card admin">
+                <i class="fas fa-user-tie"></i>
+                <h2>Admin Portal</h2>
+                <p>Log in as administrator to manage complaints and view statistics.</p>
+                <button class="btn btn-admin">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </button>
+            </a>
+        </div>
+
+        <div class="features">
+            <p style="margin-bottom: 20px;">✨ Key Features</p>
+            <div class="features-list">
+                <div class="feature-item">
+                    <i class="fas fa-lock"></i>
+                    <span>Secure Login</span>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Easy Complaint Submission</span>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Real-time Tracking</span>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Secure & Private</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>&copy; 2024 Complaint Management System. All rights reserved.</p>
+            <p style="margin-top: 10px;">Version 1.0 | Production Ready</p>
+        </div>
+    </div>
+</body>
+</html>
