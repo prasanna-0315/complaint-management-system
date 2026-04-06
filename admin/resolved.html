@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Complaints - Complaint Management System</title>
+<title>Resolved Complaints - Complaint Management System</title>
 <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -18,10 +18,10 @@
       <a href="admin_dashboard.html">
         <i class="fas fa-home"></i> Dashboard
       </a>
-      <a href="complaints.html" class="active">
+      <a href="complaints.html">
         <i class="fas fa-list-ul"></i> Complaints
       </a>
-      <a href="resolved.html">
+      <a href="resolved.html" class="active">
         <i class="fas fa-check-circle"></i> Resolved
       </a>
       <a href="blueprint.html">
@@ -41,7 +41,7 @@
     <!-- Top Bar -->
     <div class="top-bar">
       <a href="admin_dashboard.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
-      <h2><i class="fas fa-file-invoice-dollar"></i> All Complaints</h2>
+      <h2><i class="fas fa-check-circle"></i> Resolved Complaints</h2>
     </div>
 
     <!-- Filters -->
@@ -51,12 +51,7 @@
         id="searchBox" 
         placeholder="🔍 Search by category or location..."
       >
-
-      <select id="statusFilter" name="statusFilter">
-        <option value="all">All Status</option>
-        <option value="Pending">Pending</option>
-        <option value="In Progress"> In Progress</option>
-      </select>
+      <!-- No status filter needed here as all are resolved -->
     </div>
 
     <!-- Complaints will load here -->

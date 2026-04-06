@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -32,6 +33,7 @@
                 opacity: 0;
                 transform: translateY(30px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -51,9 +53,12 @@
         }
 
         @keyframes bounce {
-            0%, 100% {
+
+            0%,
+            100% {
                 transform: translateY(0);
             }
+
             50% {
                 transform: translateY(-20px);
             }
@@ -221,6 +226,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="logo-section">
@@ -231,7 +237,7 @@
 
         <div class="portal-section">
             <!-- Student Portal -->
-            <a href="/student/student_login.html" class="portal-card student">
+            <a href="student/student_login.html" class="portal-card student">
                 <i class="fas fa-user-graduate"></i>
                 <h2>Student Portal</h2>
                 <p>Log in as a student to raise complaints, track status, and manage your account.</p>
@@ -241,7 +247,7 @@
             </a>
 
             <!-- Admin Portal -->
-            <a href="/admin/admin_login.html" class="portal-card admin">
+            <a href="admin/admin_login.html" class="portal-card admin">
                 <i class="fas fa-user-tie"></i>
                 <h2>Admin Portal</h2>
                 <p>Log in as administrator to manage complaints and view statistics.</p>
@@ -279,4 +285,5 @@
         </div>
     </div>
 </body>
+
 </html>

@@ -166,7 +166,7 @@
 <body>
 
 <div class="login-wrapper">
-  <a href="/index.html" class="home-btn" title="Go to Home">
+  <a href="../index.html" class="home-btn" title="Go to Home">
     <i class="fas fa-home"></i>
   </a>
   <div class="login-card">
@@ -215,7 +215,7 @@ async function login() {
   }
 
   try {
-    const response = await fetch("http://localhost:5000/login", {
+    const response = await fetch("/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"

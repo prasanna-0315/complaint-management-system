@@ -11,38 +11,43 @@ const studentsToAdd = [
   { studentId: "CS2021001", role: "student" },
   { studentId: "CS2021002", role: "student" },
   { studentId: "CS2021003", role: "student" },
-  // Add more students as needed
+  { studentId: "CS2021004", role: "student" },
+  { studentId: "CS2021005", role: "student" },
+  { studentId: "CS2021006", role: "student"},
+  // Add more students as neededed
   // Format: { studentId: "ROLLNO", role: "student" }
 ];
 
-// Add admin user
-const adminToAdd = {
-  studentId: "admin",
-  password: "admin@123",
-  role: "admin"
-};
+// Add admin users
+const adminsToAdd = [
+  { studentId: "admin", password: "admin@123", role: "admin" },
+  { studentId: "admin2", password: "admin@123", role: "admin" },
+  { studentId: "admin3", password: "admin@123", role: "admin" }
+];
 
 async function addStudents() {
   try {
     console.log("Starting to add students and admin...\n");
 
-    // Add admin
-    try {
-      const existingAdmin = await User.findOne({ studentId: "admin" });
-      if (existingAdmin) {
-        console.log("✓ Admin user already exists");
-      } else {
-        const hashedPassword = await bcrypt.hash(adminToAdd.password, 10);
-        await User.create({
-          studentId: adminToAdd.studentId,
-          password: hashedPassword,
-          role: adminToAdd.role,
-          firstLogin: false
-        });
-        console.log(`✓ Admin added - Username: admin | Password: admin@123`);
+    // Add admins
+    for (const admin of adminsToAdd) {
+      try {
+        const existingAdmin = await User.findOne({ studentId: admin.studentId });
+        if (existingAdmin) {
+          console.log(`✓ Admin ${admin.studentId} already exists`);
+        } else {
+          const hashedPassword = await bcrypt.hash(admin.password, 10);
+          await User.create({
+            studentId: admin.studentId,
+            password: hashedPassword,
+            role: admin.role,
+            firstLogin: false
+          });
+          console.log(`✓ Admin added - Username: ${admin.studentId} | Password: ${admin.password}`);
+        }
+      } catch (err) {
+        console.log(`✗ Admin ${admin.studentId} - ${err.message}`);
       }
-    } catch (err) {
-      console.log(`✗ Admin - ${err.message}`);
     }
 
     // Add students
@@ -59,14 +64,14 @@ async function addStudents() {
             role: student.role,
             firstLogin: true
           });
-          console.log(`✓ Student ${student.studentId} added - Default Password: ${student.studentId}`);
+          console.log(` Student ${student.studentId} added - Default Password: ${student.studentId}`);
         }
       } catch (err) {
-        console.log(`✗ Student ${student.studentId} - ${err.message}`);
+        console.log(` Student ${student.studentId} - ${err.message}`);
       }
     }
 
-    console.log("\n✓ Student enrollment completed!");
+    console.log("\n Student enrollment completed!");
     console.log("\nIMPORTANT NOTES:");
     console.log("- Students with firstLogin=true must change their password on first login");
     console.log("- Admin user: admin / admin@123 (change password after first login)");

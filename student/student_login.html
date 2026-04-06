@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -62,6 +63,7 @@
         opacity: 0;
         transform: translateY(30px);
       }
+
       to {
         opacity: 1;
         transform: translateY(0);
@@ -145,9 +147,19 @@
     }
 
     @keyframes shake {
-      0%, 100% { transform: translateX(0); }
-      25% { transform: translateX(-5px); }
-      75% { transform: translateX(5px); }
+
+      0%,
+      100% {
+        transform: translateX(0);
+      }
+
+      25% {
+        transform: translateX(-5px);
+      }
+
+      75% {
+        transform: translateX(5px);
+      }
     }
 
     /* Modal Styles */
@@ -165,8 +177,13 @@
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
     }
 
     .modal-content {
@@ -185,6 +202,7 @@
         opacity: 0;
         transform: translateY(-50px);
       }
+
       to {
         opacity: 1;
         transform: translateY(0);
@@ -265,182 +283,195 @@
     }
   </style>
 </head>
+
 <body>
 
-<div class="login-wrapper">
-  <a href="../index.html" class="home-btn" title="Go to Home">
-    <i class="fas fa-home"></i>
-  </a>
-  <div class="login-card">
-    <div class="logo-section">
-      <h1>📋 CMS</h1>
-      <p>Complaint Management System</p>
-    </div>
+  <div class="login-wrapper">
+    <a href="../index.html" class="home-btn" title="Go to Home">
+      <i class="fas fa-home"></i>
+    </a>
+    <div class="login-card">
+      <div class="logo-section">
+        <h1>📋 CMS</h1>
+        <p>Complaint Management System</p>
+      </div>
 
-    <div id="loginForm" class="form-box">
-      <form onsubmit="handleLogin(event)">
-        <div class="form-group">
-          <label for="loginUser">Student ID (Roll No.)</label>
-          <input type="text" id="loginUser" placeholder="e.g., CS2021001" required>
-        </div>
+      <div id="loginForm" class="form-box">
+        <form onsubmit="handleLogin(event)">
+          <div class="form-group">
+            <label for="loginUser">Student ID (Roll No.)</label>
+            <input type="text" id="loginUser" placeholder="e.g., CS2021001" required>
+          </div>
 
-        <div class="form-group">
-          <label for="loginPass">Password</label>
-          <input type="password" id="loginPass" placeholder="Enter your password" required>
-        </div>
+          <div class="form-group">
+            <label for="loginPass">Password</label>
+            <input type="password" id="loginPass" placeholder="Enter your password" required>
+          </div>
 
-        <button type="submit" class="login-btn">
-          <i class="fas fa-sign-in-alt"></i> Login
-        </button>
+          <button type="submit" class="login-btn">
+            <i class="fas fa-sign-in-alt"></i> Login
+          </button>
 
-        <p class="error-text" id="loginError"></p>
-      </form>
+          <p class="error-text" id="loginError"></p>
+        </form>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- Password Change Modal -->
-<div id="changePasswordModal" class="modal">
-  <div class="modal-content">
-    <h2><i class="fas fa-lock"></i> Change Password</h2>
-    <p class="warning-text">
-      <i class="fas fa-info-circle"></i>
-      This is your first login. You must change your password before accessing the dashboard.
-    </p>
+  <!-- Password Change Modal -->
+  <div id="changePasswordModal" class="modal">
+    <div class="modal-content">
+      <h2><i class="fas fa-lock"></i> Change Password</h2>
+      <p class="warning-text">
+        <i class="fas fa-info-circle"></i>
+        This is your first login. You must change your password before accessing the dashboard.
+      </p>
 
-    <input type="password" id="oldPassword" class="modal-input" placeholder="Current Password" required>
-    <input type="password" id="newPassword" class="modal-input" placeholder="New Password (min 6 chars)" required>
-    <input type="password" id="confirmPassword" class="modal-input" placeholder="Confirm New Password" required>
+      <input type="password" id="oldPassword" class="modal-input" placeholder="Current Password" required>
+      <input type="password" id="newPassword" class="modal-input" placeholder="New Password (min 6 chars)" required>
+      <input type="password" id="confirmPassword" class="modal-input" placeholder="Confirm New Password" required>
 
-    <button class="modal-btn" onclick="confirmPasswordChange()">
-      <i class="fas fa-check"></i> Change Password
-    </button>
-    <p class="modal-error" id="changeError"></p>
+      <button class="modal-btn" onclick="confirmPasswordChange()">
+        <i class="fas fa-check"></i> Change Password
+      </button>
+      <p class="modal-error" id="changeError"></p>
+    </div>
   </div>
-</div>
 
-<script>
-function handleLogin(event) {
-  event.preventDefault();
-  login();
-}
+  <script>
+    // If already logged in, redirect to dashboard
+    if (sessionStorage.getItem("studentId")) {
+      window.location.replace("student_dashboard.html");
+    }
 
-async function login() {
-  const studentId = document.getElementById("loginUser").value.trim();
-  const password = document.getElementById("loginPass").value.trim();
-  const loginError = document.getElementById("loginError");
-
-  if (!studentId || !password) {
-    loginError.textContent = "❌ Please enter both Student ID and Password";
-    return;
-  }
-
-  try {
-    const response = await fetch("http://localhost:5000/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ studentId, password })
+    window.addEventListener('pageshow', function (event) {
+      if (event.persisted && sessionStorage.getItem("studentId")) {
+        window.location.replace("student_dashboard.html");
+      }
     });
 
-    const data = await response.json();
-
-    if (!response.ok) {
-      loginError.textContent = "❌ " + (data.message || "Invalid credentials");
-      return;
+    function handleLogin(event) {
+      event.preventDefault();
+      login();
     }
 
-    // Store login info in session
-    sessionStorage.setItem("studentId", data.studentId);
-    sessionStorage.setItem("role", data.role);
-    sessionStorage.setItem("firstLogin", data.firstLogin);
+    async function login() {
+      const studentId = document.getElementById("loginUser").value.trim();
+      const password = document.getElementById("loginPass").value.trim();
+      const loginError = document.getElementById("loginError");
 
-    // If first login, show password change modal
-    if (data.firstLogin) {
-      document.getElementById("loginForm").style.display = "none";
-      document.getElementById("changePasswordModal").style.display = "block";
-    } else {
-      // Go to dashboard
-      setTimeout(() => {
-        window.location.href = "student_dashboard.html";
-      }, 500);
+      if (!studentId || !password) {
+        loginError.textContent = "❌ Please enter both Student ID and Password";
+        return;
+      }
+
+      try {
+        const response = await fetch("/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ studentId, password })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          loginError.textContent = "❌ " + (data.message || "Invalid credentials");
+          return;
+        }
+
+        // Store login info in session
+        sessionStorage.setItem("studentId", data.studentId);
+        sessionStorage.setItem("role", data.role);
+        sessionStorage.setItem("firstLogin", data.firstLogin);
+
+        // If first login, show password change modal
+        if (data.firstLogin) {
+          document.getElementById("loginForm").style.display = "none";
+          document.getElementById("changePasswordModal").style.display = "block";
+        } else {
+          // Go to dashboard
+          setTimeout(() => {
+            window.location.replace("student_dashboard.html");
+          }, 500);
+        }
+      } catch (error) {
+        loginError.textContent = "❌ Connection error. Please try again.";
+        console.error("Login error:", error);
+      }
     }
-  } catch (error) {
-    loginError.textContent = "❌ Connection error. Please try again.";
-    console.error("Login error:", error);
-  }
-}
 
-async function confirmPasswordChange() {
-  const studentId = sessionStorage.getItem("studentId");
-  const oldPassword = document.getElementById("oldPassword").value.trim();
-  const newPassword = document.getElementById("newPassword").value.trim();
-  const confirmPassword = document.getElementById("confirmPassword").value.trim();
-  const changeError = document.getElementById("changeError");
+    async function confirmPasswordChange() {
+      const studentId = sessionStorage.getItem("studentId");
+      const oldPassword = document.getElementById("oldPassword").value.trim();
+      const newPassword = document.getElementById("newPassword").value.trim();
+      const confirmPassword = document.getElementById("confirmPassword").value.trim();
+      const changeError = document.getElementById("changeError");
 
-  changeError.textContent = "";
+      changeError.textContent = "";
 
-  // Validation
-  if (!oldPassword || !newPassword || !confirmPassword) {
-    changeError.textContent = "❌ All fields are required";
-    return;
-  }
+      // Validation
+      if (!oldPassword || !newPassword || !confirmPassword) {
+        changeError.textContent = "❌ All fields are required";
+        return;
+      }
 
-  if (newPassword !== confirmPassword) {
-    changeError.textContent = "❌ New passwords do not match";
-    return;
-  }
+      if (newPassword !== confirmPassword) {
+        changeError.textContent = "❌ New passwords do not match";
+        return;
+      }
 
-  if (newPassword.length < 6) {
-    changeError.textContent = "❌ New password must be at least 6 characters";
-    return;
-  }
+      if (newPassword.length < 6) {
+        changeError.textContent = "❌ New password must be at least 6 characters";
+        return;
+      }
 
-  if (oldPassword === newPassword) {
-    changeError.textContent = "❌ New password must be different from current password";
-    return;
-  }
+      if (oldPassword === newPassword) {
+        changeError.textContent = "❌ New password must be different from current password";
+        return;
+      }
 
-  try {
-    const response = await fetch("http://localhost:5000/change-password", {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ studentId, oldPassword, newPassword })
+      try {
+        const response = await fetch("/change-password", {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ studentId, oldPassword, newPassword })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          changeError.textContent = "❌ " + (data.message || "Error changing password");
+          return;
+        }
+
+        // Success - show message and redirect
+        changeError.textContent = "✓ Password changed successfully! Redirecting...";
+        changeError.style.color = "#28a745";
+
+        setTimeout(() => {
+          window.location.replace("student_dashboard.html");
+        }, 1500);
+      } catch (error) {
+        changeError.textContent = "❌ Connection error. Please try again.";
+        console.error("Password change error:", error);
+      }
+    }
+
+    // Allow Enter key for password fields
+    document.addEventListener("DOMContentLoaded", function () {
+      const confirmBtn = document.querySelector(".modal-btn");
+      document.getElementById("confirmPassword").addEventListener("keypress", function (event) {
+        if (event.key === "Enter") {
+          confirmPasswordChange();
+        }
+      });
     });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      changeError.textContent = "❌ " + (data.message || "Error changing password");
-      return;
-    }
-
-    // Success - show message and redirect
-    changeError.textContent = "✓ Password changed successfully! Redirecting...";
-    changeError.style.color = "#28a745";
-    
-    setTimeout(() => {
-      window.location.href = "student_dashboard.html";
-    }, 1500);
-  } catch (error) {
-    changeError.textContent = "❌ Connection error. Please try again.";
-    console.error("Password change error:", error);
-  }
-}
-
-// Allow Enter key for password fields
-document.addEventListener("DOMContentLoaded", function() {
-  const confirmBtn = document.querySelector(".modal-btn");
-  document.getElementById("confirmPassword").addEventListener("keypress", function(event) {
-    if (event.key === "Enter") {
-      confirmPasswordChange();
-    }
-  });
-});
-</script>
+  </script>
 
 </body>
+
 </html>

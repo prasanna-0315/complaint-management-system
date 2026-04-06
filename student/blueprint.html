@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Campus Blueprint - Complaint Management System</title>
+  <link rel="stylesheet" href="student.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .blueprint-container {
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      margin-top: 20px;
+      text-align: center;
+    }
+    .blueprint-image {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      border: 3px solid #2c3e50;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+    .blueprint-caption {
+      margin-top: 15px;
+      color: #666;
+      font-size: 0.9em;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="student-dashboard">
+    <!-- SIDEBAR -->
+    <aside class="student-sidebar">
+      <h2 class="logo"><i class="fas fa-file-invoice"></i> CMS</h2>
+      <nav>
+        <a href="raise.html">
+          <i class="fas fa-pencil-alt"></i> Raise Complaint
+        </a>
+        <a href="student_dashboard.html?tab=track">
+          <i class="fas fa-search"></i> Track Status
+        </a>
+        <a href="blueprint.html" class="active">
+          <i class="fas fa-map-marked-alt"></i> Campus Blueprint
+        </a>
+        <a href="student_dashboard.html?tab=profile">
+          <i class="fas fa-user-circle"></i> Profile
+        </a>
+        <a href="#" onclick="logout()">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
+      </nav>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="student-main">
+      <header class="student-top-bar">
+        <h1><i class="fas fa-map-marked-alt"></i> Campus Blueprint</h1>
+        <span class="student-name" id="studentName">
+          <i class="fas fa-user-circle"></i> Welcome, Student
+        </span>
+      </header>
+
+      <div class="blueprint-container">
+        <h2>Reference Map for Location Identifiers</h2>
+        <p style="margin-bottom: 20px; color: #555;">Use this architectural blueprint to identify exact building names and locations when raising a complaint.</p>
+        <img src="/assets/campus_blueprint.png" alt="College Campus Blueprint" class="blueprint-image">
+        <p class="blueprint-caption">Campus Layout spanning Main Building, Science Block, Engineering Block, Library, Sports Complex, and Hostels A/B.</p>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Prevent back button with logout prompt
+    history.pushState(null, null, location.href);
+    window.onpopstate = function () {
+      if (confirm("Confirm to logout?")) {
+        logout();
+      } else {
+        history.pushState(null, null, location.href);
+      }
+    };
+
+    // Check auth
+    document.addEventListener("DOMContentLoaded", function () {
+      const studentId = sessionStorage.getItem("studentId");
+      if (!studentId) {
+        window.location.replace("student_login.html");
+        return;
+      }
+      document.getElementById("studentName").textContent = "Welcome, " + studentId;
+    });
+
+    window.addEventListener('pageshow', function (event) {
+      if (event.persisted && !sessionStorage.getItem("studentId")) {
+        window.location.replace("student_login.html");
+      }
+    });
+
+    function logout() {
+      sessionStorage.clear();
+      window.location.replace("../index.html");
+    }
+  </script>
+</body>
+</html>

@@ -22,6 +22,12 @@
       <a href="complaints.html">
         <i class="fas fa-list-ul"></i> Complaints
       </a>
+      <a href="resolved.html">
+        <i class="fas fa-check-circle"></i> Resolved
+      </a>
+      <a href="blueprint.html">
+        <i class="fas fa-map-marked-alt"></i> Blueprint
+      </a>
       <a href="#" onclick="showAdminInfo(event)">
         <i class="fas fa-user-tie"></i> Admin Info
       </a>
@@ -101,6 +107,33 @@
 
           <div class="divider-modal"></div>
 
+          <div class="password-section" style="margin-top: 15px; margin-bottom: 15px;">
+            <h3><i class="fas fa-lock"></i> Change Password</h3>
+            <button id="togglePasswordBtn" class="change-pass-btn" onclick="togglePasswordForm(event)" style="background: #2980b9; border: none; padding: 8px 15px; color: white; border-radius: 5px; cursor: pointer; margin-bottom: 10px;">
+              <i class="fas fa-key"></i> Reset Password
+            </button>
+            <form id="changePasswordForm" onsubmit="handleChangePassword(event)" style="display: none; background: #f8f9fa; padding: 15px; border-radius: 5px;">
+              <div style="margin-bottom: 10px;">
+                <label style="display: block; margin-bottom: 5px;">Current Password</label>
+                <input type="password" id="currentPassword" required style="width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px;">
+                <small id="currentPassError" style="color: #e74c3c;"></small>
+              </div>
+              <div style="margin-bottom: 10px;">
+                <label style="display: block; margin-bottom: 5px;">New Password</label>
+                <input type="password" id="newPassword" required minlength="6" style="width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px;">
+              </div>
+              <div style="margin-bottom: 10px;">
+                <label style="display: block; margin-bottom: 5px;">Confirm Password</label>
+                <input type="password" id="confirmPassword" required style="width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px;">
+                <small id="confirmPassError" style="color: #e74c3c;"></small>
+              </div>
+              <button type="submit" style="background: #27ae60; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; width: 100%;">Update Password</button>
+              <small id="passwordMessage" style="display: block; margin-top: 10px; text-align: center;"></small>
+            </form>
+          </div>
+
+          <div class="divider-modal"></div>
+
           <div class="logout-info-section">
             <h3><i class="fas fa-sign-out-alt"></i> Logout</h3>
             <p>Click the button below to securely logout from your admin account.</p>
@@ -118,6 +151,63 @@
 
 <script>
 
+// Prevent back button with logout prompt
+history.pushState(null, null, location.href);
+window.onpopstate = function () {
+  if (confirm("Confirm to logout?")) {
+    logout();
+  } else {
+    history.pushState(null, null, location.href);
+  }
+};
+
+function togglePasswordForm(event) {
+  if (event) event.preventDefault();
+  const form = document.getElementById("changePasswordForm");
+  if (form.style.display === "none") {
+    form.style.display = "block";
+  } else {
+    form.style.display = "none";
+  }
+}
+
+async function handleChangePassword(event) {
+  event.preventDefault();
+
+  const adminId = sessionStorage.getItem("adminId");
+  const currentPassword = document.getElementById("currentPassword").value;
+  const newPassword = document.getElementById("newPassword").value;
+  const confirmPassword = document.getElementById("confirmPassword").value;
+
+  if (newPassword !== confirmPassword) {
+    document.getElementById("confirmPassError").textContent = "Passwords do not match";
+    return;
+  }
+
+  try {
+    const response = await fetch("/change-password", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ studentId: adminId, oldPassword: currentPassword, newPassword: newPassword })
+    });
+
+    if (response.ok) {
+      document.getElementById("passwordMessage").textContent = "✓ Password changed successfully!";
+      document.getElementById("passwordMessage").style.color = "#27ae60";
+      document.getElementById("changePasswordForm").reset();
+      document.getElementById("currentPassError").textContent = "";
+      document.getElementById("confirmPassError").textContent = "";
+      setTimeout(() => logout(), 2000);
+    } else {
+      const error = await response.json();
+      document.getElementById("currentPassError").textContent = error.message || "Invalid current password";
+    }
+  } catch (error) {
+    document.getElementById("passwordMessage").textContent = "Error changing password.";
+    document.getElementById("passwordMessage").style.color = "#e74c3c";
+  }
+}
+
 // Check admin auth
 function checkAuth() {
   const adminId = sessionStorage.getItem("adminId");
@@ -130,7 +220,7 @@ function checkAuth() {
 
 async function loadDashboardStats(){
   try {
-    const res = await fetch("http://localhost:5000/complaint");
+    const res = await fetch("/complaint");
     const complaints = await res.json();
 
     const total = complaints.length;
@@ -176,7 +266,7 @@ function closeAdminInfo() {
 // Logout function
 function logout() {
   sessionStorage.clear();
-  window.location.href = "/index.html";
+  window.location.href = "../index.html";
 }
 
 // Close modal when clicking outside

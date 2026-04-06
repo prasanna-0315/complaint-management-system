@@ -1,4 +1,5 @@
 let allComplaints = [];
+const PRIORITY_BY_RANK = ["Critical", "High", "Medium", "Low"];
 
 // Check admin auth
 function checkAuth() {
@@ -12,28 +13,91 @@ function checkAuth() {
 
 /* Load complaints from backend */
 
-async function loadComplaints(){
+async function loadComplaints() {
 
   const container = document.getElementById("complaintsContainer");
 
   try {
-    const res = await fetch("http://localhost:5000/complaint");
-    allComplaints = await res.json();
-    renderComplaints(allComplaints);
+    const res = await fetch("/complaint");
+    const complaints = await res.json();
+    const priorityByCategory = buildPriorityByCategoryMap(complaints);
+    allComplaints = await syncDynamicPriorities(complaints, priorityByCategory);
+    applyFilters();
   } catch (error) {
     console.error("Error loading complaints:", error);
     container.innerHTML = "<p>Error loading complaints. Please check if the server is running.</p>";
   }
 }
 
+function buildPriorityByCategoryMap(complaints) {
+  const countByCategory = {};
+
+  // Count active (unresolved) complaints per category
+  complaints.forEach((complaint) => {
+    if (complaint.status !== "Resolved") {
+      const category = complaint.category || "Others";
+      countByCategory[category] = (countByCategory[category] || 0) + 1;
+    }
+  });
+
+  const priorityByCategory = {};
+
+  Object.keys(countByCategory).forEach((category) => {
+    const count = countByCategory[category];
+    if (count <= 1) {
+      priorityByCategory[category] = "Low";
+    } else if (count === 2) {
+      priorityByCategory[category] = "Medium";
+    } else if (count === 3) {
+      priorityByCategory[category] = "High";
+    } else {
+      priorityByCategory[category] = "Critical";
+    }
+  });
+
+  return priorityByCategory;
+}
+
+async function syncDynamicPriorities(complaints, priorityByCategory) {
+  const updateRequests = complaints
+    .filter((complaint) => {
+      const expectedPriority = priorityByCategory[complaint.category] || "Low";
+      return complaint.priority !== expectedPriority;
+    })
+    .map(async (complaint) => {
+      const expectedPriority = priorityByCategory[complaint.category] || "Low";
+      try {
+        await fetch(`/complaint/${complaint._id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ priority: expectedPriority })
+        });
+      } catch (error) {
+        console.error(`Priority update failed for ${complaint._id}:`, error);
+      }
+    });
+
+  if (updateRequests.length > 0) {
+    await Promise.all(updateRequests);
+  }
+
+  return complaints.map((complaint) => ({
+    ...complaint,
+    priority: priorityByCategory[complaint.category] || "Low"
+  }));
+}
+
 
 /* Render complaints */
 
-function renderComplaints(list){
+function renderComplaints(list) {
 
   const container = document.getElementById("complaintsContainer");
+  const isResolvedPage = window.location.pathname.includes("resolved.html");
 
-  if(list.length === 0){
+  if (list.length === 0) {
     container.innerHTML = "<p>No complaints found</p>";
     return;
   }
@@ -52,24 +116,26 @@ function renderComplaints(list){
           ${c.description}
         </div>
 
-        <small>Priority: ${c.priority || 'Medium'}</small><br>
+        ${!isResolvedPage ? `<small>Priority: ${c.priority || 'Low'}</small><br>` : ''}
         <small>ID: ${c._id}</small>
 
       </div>
 
       <div>
 
-        <span class="status ${c.status.toLowerCase().replace(" ","-")}">
+        <span class="status ${c.status.toLowerCase().replace(" ", "-")}">
           ${c.status}
         </span>
-
+        
+        ${!isResolvedPage ? `
         <br><br>
 
         <select onchange="updateStatus('${c._id}', this.value)">
-          <option value="Pending" ${c.status==="Pending"?"selected":""}>Pending</option>
-          <option value="In Progress" ${c.status==="In Progress"?"selected":""}>In Progress</option>
-          <option value="Resolved" ${c.status==="Resolved"?"selected":""}>Resolved</option>
+          <option value="Pending" ${c.status === "Pending" ? "selected" : ""}>Pending</option>
+          <option value="In Progress" ${c.status === "In Progress" ? "selected" : ""}>In Progress</option>
+          <option value="Resolved" ${c.status === "Resolved" ? "selected" : ""} ${c.status === "Pending" ? "disabled title=\"Must be In Progress first\"" : ""}>Resolved</option>
         </select>
+        ` : ''}
 
       </div>
 
@@ -81,37 +147,71 @@ function renderComplaints(list){
 
 /* Update complaint status */
 
-async function updateStatus(id,status){
+async function updateStatus(id, status) {
 
   try {
-    await fetch(`http://localhost:5000/complaint/${id}`,{
-      method:"PUT",
-      headers:{
-        "Content-Type":"application/json"
+    const response = await fetch(`/complaint/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
       },
-      body: JSON.stringify({status})
+      body: JSON.stringify({ status })
     });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      alert(errorData.message || "Error updating complaint status");
+    }
+
     loadComplaints();
   } catch (error) {
     console.error("Error updating status:", error);
-    alert("Error updating complaint status");
+    alert("Error updating complaint status. Server may be down.");
   }
 }
 
 
-/* Search complaints */
+/* Filters */
 
-document.addEventListener("DOMContentLoaded", function() {
+function applyFilters() {
+  const isResolvedPage = window.location.pathname.includes("resolved.html");
+  const searchBox = document.getElementById("searchBox");
+  const statusFilter = document.getElementById("statusFilter");
+
+  let filtered = allComplaints;
+
+  // 1. Page level filtering
+  if (isResolvedPage) {
+    filtered = filtered.filter(c => c.status === "Resolved");
+  } else {
+    filtered = filtered.filter(c => c.status !== "Resolved");
+  }
+
+  // 2. Status filtering 
+  if (statusFilter && statusFilter.value !== "all") {
+    filtered = filtered.filter(c => c.status === statusFilter.value);
+  }
+
+  // 3. Search filtering
+  if (searchBox && searchBox.value.trim() !== "") {
+    const value = searchBox.value.toLowerCase();
+    filtered = filtered.filter(c =>
+      (c.category && c.category.toLowerCase().includes(value)) ||
+      (c.location && c.location.toLowerCase().includes(value)) ||
+      (c.priority && c.priority.toLowerCase().includes(value))
+    );
+  }
+
+  renderComplaints(filtered);
+}
+
+document.addEventListener("DOMContentLoaded", function () {
   const searchBox = document.getElementById("searchBox");
   if (searchBox) {
-    searchBox.addEventListener("input", function(){
-      const value = this.value.toLowerCase();
-      const filtered = allComplaints.filter(c =>
-        c.category.toLowerCase().includes(value) ||
-        c.location.toLowerCase().includes(value) ||
-        (c.priority && c.priority.toLowerCase().includes(value))
-      );
-      renderComplaints(filtered);
-    });
+    searchBox.addEventListener("input", applyFilters);
+  }
+  const statusFilter = document.getElementById("statusFilter");
+  if (statusFilter) {
+    statusFilter.addEventListener("change", applyFilters);
   }
 });

@@ -2,16 +2,17 @@ import mongoose from "mongoose";
 
 const ComplaintSchema = new mongoose.Schema({
   complaintId: {
-  type: String,
-  unique: true
-},
+    type: String,
+    unique: true,
+    sparse: true
+  },
   studentName: {
     type: String,
     required: true
   },
-studentId: {
-  type: String
-},
+  studentId: {
+    type: String
+  },
   category: {
     type: String,
     enum: [
@@ -39,18 +40,22 @@ studentId: {
     required: true
   },
   location: {
-  type: String,
-  required: true
-},
+    type: String,
+    required: true
+  },
   status: {
     type: String,
     enum: ['Pending', 'In Progress', 'Resolved'],
     default: 'Pending'
   },
+  inProgressAt: {
+    type: Date,
+    default: null
+  },
   priority: {
     type: String,
     enum: ['Low', 'Medium', 'High', 'Critical'],
-    default: 'Medium'
+    default: 'Low'
   },
   assignedTo: {
     type: String,
