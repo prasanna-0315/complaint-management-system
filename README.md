@@ -1,51 +1,153 @@
 # Complaint Management System
 
-Student/Admin complaint tracking app with Node.js/Express backend, MongoDB, and static HTML/CSS/JS frontend.
+A web-based **Complaint Management System** developed to simplify the process of registering, tracking, and managing complaints within an organization or institution. The system provides separate interfaces for students/users and administrators, ensuring efficient complaint handling and status tracking.
 
-## Run locally
+---
 
-1. Clone repo
-   - `git clone https://github.com/<your-username>/<your-repo>.git`
-2. Install dependencies
-   - `npm install`
-3. Set environment variable for MongoDB (or create `.env` file)
-   - `MONGO_URI=mongodb+srv://<user>:<pass>@cluster0.mongodb.net/ComplaintDB?retryWrites=true&w=majority`
-4. Start server
-   - `npm start`
-5. Open UI
-   - Student: `student/student_login.html`
-   - Admin: `admin/admin_login.html`
+## Features
 
-## Deployment to GitHub
+### Student Module
+- User Registration and Login
+- Raise New Complaints
+- View Complaint History
+- Track Complaint Status
+- Change Password
 
-1. Commit everything:
-   - `git add .`
-   - `git commit -m "Deploy-ready"
-   - `git push origin main`
-2. Use GitHub Pages (frontend only):
-   - Settings → Pages → Source `main`/`root` or `/student`
-   - Example URL: `https://<your-username>.github.io/<your-repo>/student_login.html`
+### Admin Module
+- Secure Admin Login
+- View All Complaints
+- Update Complaint Status
+- Manage Complaint Records
+- Monitor Complaint Progress
 
-> Backend cannot run on GitHub Pages. Use a Node host like Railway, Render, Heroku, or Fly.io.
+---
 
-## Deployment to Railway (recommended)
+## Technology Stack
 
-1. In Railway, create project from GitHub repo.
-2. Set environment variables:
-   - `MONGO_URI`
-3. Set start command:
-   - `npm start`
-4. Deploy and note backend URL.
-5. Update frontend API endpoints: in `student/student_dashboard.html` and `admin/admin_dashboard.html`, replace `http://localhost:5000` with deployed URL.
+### Frontend
+- HTML5
+- CSS3
+- JavaScript
 
-## Production configuration
+### Backend
+- Node.js
+- Express.js
 
-- `.gitignore` already configured for node_modules and sensitive files.
-- `package.json` uses:
-   - `npm start` -> `node backend/server.js`
-   - `npm run dev` -> `npx nodemon backend/server.js`
+### Database
+- MongoDB
 
-## Notes
+### Cloud Services
+- Amazon EC2 (Application Hosting)
+- Amazon S3 (File Storage)
+- AWS IAM (Access Management)
 
-- Make sure MongoDB Atlas user has read/write permission.
-- Test login with existing seeded students/admins from `backend/enrollStudents.js`.
+### Other Tools
+- Git & GitHub
+- PM2
+- MongoDB Atlas
+
+---
+
+## Project Structure
+
+```
+complaint-management-system/
+│
+├── admin/
+├── student/
+├── backend/
+│   ├── config/
+│   ├── controllers/
+│   ├── models/
+│   ├── routes/
+│   └── server.js
+│
+├── assets/
+├── package.json
+└── README.md
+```
+
+---
+
+## Installation
+
+### Clone the Repository
+
+```bash
+git clone https://github.com/your-username/complaint-management-system.git
+cd complaint-management-system
+```
+
+### Install Dependencies
+
+```bash
+npm install
+```
+
+### Configure Database
+
+Update the MongoDB connection string in:
+
+```
+backend/config/db.js
+```
+
+### Start the Application
+
+```bash
+npm start
+```
+
+The application will run on:
+
+```
+http://localhost:5000
+```
+
+---
+
+## Deployment
+
+The project is deployed using AWS services.
+
+- Amazon EC2 – Hosts the Node.js application.
+- Amazon S3 – Stores project assets and uploaded files.
+- AWS IAM – Manages secure access and permissions.
+
+PM2 is used as the process manager to keep the application running continuously.
+
+---
+
+## Future Enhancements
+
+- Email Notifications
+- File Upload Support
+- Dashboard Analytics
+- Role-Based Access Control
+- Mobile Responsive UI
+- AI-Based Complaint Categorization
+
+---
+
+## Advantages
+
+- Easy complaint registration
+- Faster complaint resolution
+- Secure user authentication
+- Centralized complaint management
+- Cloud-based deployment
+- User-friendly interface
+
+---
+
+## Team
+
+**Project Title:** Complaint Management System
+
+Developed as a Final Year Engineering Project using Web Technologies and AWS Cloud Services.
+
+---
+
+## License
+
+This project is developed for academic and educational purposes.
