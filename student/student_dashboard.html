@@ -92,10 +92,7 @@
             <span class="label">Submitted On:</span>
             <span class="value" id="resultDate">-</span>
           </div>
-          <div class="result-item">
-            <span class="label">Priority:</span>
-            <span class="value" id="resultPriority">-</span>
-          </div>
+
           <div class="result-item">
             <span class="label">Status:</span>
             <span class="result-status" id="resultStatus">-</span>
@@ -137,7 +134,8 @@
 
             <div class="password-section">
               <h3><i class="fas fa-lock"></i> Change Password</h3>
-              <button id="togglePasswordBtn" class="change-pass-btn" onclick="togglePasswordForm(event)" style="margin-bottom: 15px; background: #6c5ce7; border: none; padding: 10px 20px; color: white; border-radius: 5px; cursor: pointer; transition: background 0.3s;">
+              <button id="togglePasswordBtn" class="change-pass-btn" onclick="togglePasswordForm(event)"
+                style="margin-bottom: 15px; background: #6c5ce7; border: none; padding: 10px 20px; color: white; border-radius: 5px; cursor: pointer; transition: background 0.3s;">
                 <i class="fas fa-key"></i> Reset Password
               </button>
               <form id="changePasswordForm" onsubmit="handleChangePassword(event)" style="display: none;">
@@ -377,7 +375,7 @@
           document.getElementById("resultLocation").textContent = complaint.location || "-";
           document.getElementById("resultDescription").textContent = complaint.description;
           document.getElementById("resultDate").textContent = new Date(complaint.createdAt).toLocaleDateString();
-          document.getElementById("resultPriority").textContent = complaint.priority || "-";
+
 
           const statusEl = document.getElementById("resultStatus");
           statusEl.textContent = complaint.status;
@@ -407,6 +405,8 @@
           return;
         }
 
+        complaints.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
         container.innerHTML = complaints.map(complaint => `
         <div class="complaint-card">
           <div class="complaint-card-header">
@@ -416,7 +416,7 @@
           <div class="complaint-card-body">
             <div><strong>ID:</strong> ${complaint._id}</div>
             <div><strong>Date:</strong> ${new Date(complaint.createdAt).toLocaleDateString()}</div>
-            <div><strong>Priority:</strong> ${complaint.priority || 'Low'}</div>
+
           </div>
         </div>
       `).join('');

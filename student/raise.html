@@ -124,7 +124,7 @@
               </div>
               <div class="form-group">
                 <label for="collegeFloor">Floor *</label>
-                <select id="collegeFloor">
+                <select id="collegeFloor" onchange="handleCollegeFloorChange()">
                   <option value="">Select Floor</option>
                   <option value="Ground Floor">Ground Floor</option>
                   <option value="1st Floor">1st Floor</option>
@@ -136,15 +136,6 @@
                 <label for="collegeRoomType">Room/Area Type *</label>
                 <select id="collegeRoomType">
                   <option value="">Select Room/Area Type</option>
-                  <option value="Classroom 101">Classroom 101</option>
-                  <option value="Classroom 102">Classroom 102</option>
-                  <option value="Classroom 201">Classroom 201</option>
-                  <option value="Classroom 202">Classroom 202</option>
-                  <option value="Lab 1">Lab 1</option>
-                  <option value="Lab 2">Lab 2</option>
-                  <option value="Staff Room">Staff Room</option>
-                  <option value="Washroom">Washroom</option>
-                  <option value="Corridor">Corridor</option>
                 </select>
               </div>
             </div>
@@ -163,7 +154,7 @@
               </div>
               <div class="form-group">
                 <label for="hostelFloor">Floor *</label>
-                <select id="hostelFloor">
+                <select id="hostelFloor" onchange="handleHostelFloorChange()">
                   <option value="">Select Floor</option>
                   <option value="Ground Floor">Ground Floor</option>
                   <option value="1st Floor">1st Floor</option>
@@ -175,16 +166,6 @@
                 <label for="hostelRoom">Room No *</label>
                 <select id="hostelRoom">
                   <option value="">Select Room</option>
-                  <option value="Room 101">Room 101</option>
-                  <option value="Room 102">Room 102</option>
-                  <option value="Room 103">Room 103</option>
-                  <option value="Room 201">Room 201</option>
-                  <option value="Room 202">Room 202</option>
-                  <option value="Room 203">Room 203</option>
-                  <option value="Room 301">Room 301</option>
-                  <option value="Washroom">Washroom</option>
-                  <option value="Common Room">Common Room</option>
-                  <option value="Mess Area">Mess Area</option>
                 </select>
               </div>
             </div>
@@ -307,10 +288,10 @@
       } else {
         subGroup.classList.add("hidden");
         subSelect.required = false;
-        
+
         // No subcategory needed, go straight to estate/location selection
         if (type) {
-           handleSubCategoryChange();
+          handleSubCategoryChange();
         }
       }
     }
@@ -376,11 +357,55 @@
         document.getElementById("collegeBlock").required = true;
         document.getElementById("collegeFloor").required = true;
         document.getElementById("collegeRoomType").required = true;
+        handleCollegeFloorChange();
       } else if (estate === "Hostel") {
         hostelFields.classList.remove("hidden");
         document.getElementById("hostelBlock").required = true;
         document.getElementById("hostelFloor").required = true;
         document.getElementById("hostelRoom").required = true;
+        handleHostelFloorChange();
+      }
+    }
+
+    const collegeRoomsByFloor = {
+      "Ground Floor": ["Staff Room", "Lab 1", "Washroom", "Corridor"],
+      "1st Floor": ["Classroom 101", "Classroom 102", "Lab 2", "Washroom", "Corridor"],
+      "2nd Floor": ["Classroom 201", "Classroom 202", "Washroom", "Corridor"],
+      "3rd Floor": ["Washroom", "Corridor"]
+    };
+
+    const hostelRoomsByFloor = {
+      "Ground Floor": ["Mess Area", "Common Room", "Washroom"],
+      "1st Floor": ["Room 101", "Room 102", "Room 103", "Washroom"],
+      "2nd Floor": ["Room 201", "Room 202", "Room 203", "Washroom"],
+      "3rd Floor": ["Room 301", "Washroom"]
+    };
+
+    function handleCollegeFloorChange() {
+      const floor = document.getElementById("collegeFloor").value;
+      const roomSelect = document.getElementById("collegeRoomType");
+      roomSelect.innerHTML = '<option value="">Select Room/Area Type</option>';
+      if (floor && collegeRoomsByFloor[floor]) {
+        collegeRoomsByFloor[floor].forEach(room => {
+          const option = document.createElement("option");
+          option.value = room;
+          option.textContent = room;
+          roomSelect.appendChild(option);
+        });
+      }
+    }
+
+    function handleHostelFloorChange() {
+      const floor = document.getElementById("hostelFloor").value;
+      const roomSelect = document.getElementById("hostelRoom");
+      roomSelect.innerHTML = '<option value="">Select Room</option>';
+      if (floor && hostelRoomsByFloor[floor]) {
+        hostelRoomsByFloor[floor].forEach(room => {
+          const option = document.createElement("option");
+          option.value = room;
+          option.textContent = room;
+          roomSelect.appendChild(option);
+        });
       }
     }
 

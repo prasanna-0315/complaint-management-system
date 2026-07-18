@@ -202,6 +202,26 @@ function applyFilters() {
     );
   }
 
+  // 4. Sort by Priority (Critical > High > Medium > Low)
+  const priorityScore = {
+    "Critical": 4,
+    "High": 3,
+    "Medium": 2,
+    "Low": 1
+  };
+
+  filtered.sort((a, b) => {
+    const scoreA = priorityScore[a.priority] || 0;
+    const scoreB = priorityScore[b.priority] || 0;
+
+    // Fallback sorting by date (newest first) if same priority
+    if (scoreA === scoreB) {
+      return new Date(b.createdAt) - new Date(a.createdAt);
+    }
+
+    return scoreB - scoreA;
+  });
+
   renderComplaints(filtered);
 }
 

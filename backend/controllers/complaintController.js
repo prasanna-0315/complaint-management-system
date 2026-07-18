@@ -14,15 +14,15 @@ export const createComplaint = async (req, res) => {
       { $sort: { count: -1 } },
       { $limit: 2 }
     ]);
-    
+
     let maxCount = topCounts.length > 0 ? topCounts[0].count : 0;
     let secondMaxCount = topCounts.length > 1 ? topCounts[1].count : 0;
-    
+
     if (currentN > maxCount) {
-       secondMaxCount = maxCount;
-       maxCount = currentN;
+      secondMaxCount = maxCount;
+      maxCount = currentN;
     } else if (currentN > secondMaxCount && currentN < maxCount) {
-       secondMaxCount = currentN;
+      secondMaxCount = currentN;
     }
 
     let calculatedPriority = 'Low';
